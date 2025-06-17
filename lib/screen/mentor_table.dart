@@ -1,30 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:mentor_data_table/data/data_source_policy.dart';
 
-import '../data/submission_entry.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MentorTable extends StatelessWidget {
-  final DataSourcePolicy dataSource;
+import '../provider/form_entries_provider.dart';
+import '../provider/form_entry.dart';
 
-  const MentorTable(this.dataSource, {super.key});
+class MentorTable extends ConsumerWidget {
+  const MentorTable({super.key});
 
   List<DataColumn> _createColumns() {
-    return SubmissionEntry.fields().map((name) {
-      return DataColumn(label: Text(name));
+    return FormEntry.fields.map((field) {
+      return DataColumn(label: Text(field));
     }).toList();
   }
 
-  List<DataRow> _createRows() {
-    return [];
+  List<DataRow> _createRows(List<FormEntry> entries) {
+    return entries.map((entry) {
+      return DataRow(
+        cells: [
+          DataCell(Text(entry.mentorName)),
+          DataCell(Text(entry.studentName)),
+          DataCell(Text(entry.sessionDetails)),
+          DataCell(Text(entry.notes)),
+        ],
+      );
+    }).toList();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // async because likely fetching from database via http request
+    final asyncData = ref.watch(formEntriesProvider);
+
     return Scaffold(
-      body: Center(
-        child: SizedBox.expand(
-          child: DataTable(columns: _createColumns(), rows: _createRows()),
+      body: asyncData.when(
+        data: (entries) => Center(
+          child: SizedBox.expand(
+            child: DataTable(
+              columns: _createColumns(),
+              rows: _createRows(entries),
+            ),
+          ),
         ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) =>
+            const Center(child: Text("Oops, something went wrong.")),
       ),
     );
   }
