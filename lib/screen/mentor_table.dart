@@ -8,9 +8,18 @@ import '../provider/form_entry.dart';
 class MentorTable extends ConsumerWidget {
   const MentorTable({super.key});
 
-  List<DataColumn> _createColumns() {
+  List<DataColumn> _createColumns(WidgetRef ref) {
+    final notifier = ref.read(formEntriesProvider.notifier);
     return FormEntry.fields.map((field) {
-      return DataColumn(label: Text(field));
+      return DataColumn(
+        label: Text(field),
+        onSort: (_, _) {
+          // Get the function for the selected column to compare its values between two rows.
+          // final getter = FormEntry.fieldGetters[field]!;
+          // notifier.sortBy(field, (a, b) => getter(a).compareTo(getter(b)));
+          notifier.sortBy(field, (a, b) => a[field].compareTo(b[field]));
+        },
+      );
     }).toList();
   }
 
@@ -36,15 +45,30 @@ class MentorTable extends ConsumerWidget {
       body: asyncData.when(
         data: (entries) => Center(
           child: SizedBox.expand(
-            child: DataTable(
-              columns: _createColumns(),
-              rows: _createRows(entries),
+            child: SingleChildScrollView(
+              child: DataTable(
+                columns: _createColumns(ref),
+                rows: _createRows(entries),
+              ),
             ),
           ),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) =>
-            const Center(child: Text("Oops, something went wrong.")),
+        error: (error, stackTrace) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Error: $error',
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

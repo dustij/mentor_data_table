@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'form_entry.dart';
 
 abstract interface class DataPolicy {
@@ -9,9 +13,10 @@ abstract interface class DataPolicy {
 class ExamplePolicy implements DataPolicy {
   const ExamplePolicy();
   @override
-  Future<List<FormEntry>> fetchEntries() {
-    // TODO: implement fetchEntries
-    throw UnimplementedError();
+  Future<List<FormEntry>> fetchEntries() async {
+    final source = await rootBundle.loadString("assets/example.json");
+    final List<dynamic> jsonList = json.decode(source);
+    return jsonList.map((item) => FormEntry.fromJson(item)).toList();
   }
 }
 
