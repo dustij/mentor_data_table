@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'data_policy.dart';
+import 'fetch_policy.dart';
 import 'form_entry.dart';
 
 // Generated code lives in part
@@ -15,7 +15,9 @@ class FormEntries extends _$FormEntries {
 
   @override
   Future<List<FormEntry>> build() async {
-    final fetched = await activePolicy.fetchEntries();
+    // simulated delay, remove later
+    await Future.delayed(const Duration(seconds: 2));
+    final fetched = await activeFetchPolicy.fetch();
     _original = fetched;
     return List.of(fetched);
   }

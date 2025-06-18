@@ -4,16 +4,16 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'form_entry.dart';
 
-abstract interface class DataPolicy {
-  Future<List<FormEntry>> fetchEntries();
+abstract interface class FetchPolicy {
+  Future<List<FormEntry>> fetch();
 }
 
 /// Example policy used for development and debugging.
 /// It loads dummy data from a local JSON file located in the `example/` directory.
-class ExamplePolicy implements DataPolicy {
+class ExamplePolicy implements FetchPolicy {
   const ExamplePolicy();
   @override
-  Future<List<FormEntry>> fetchEntries() async {
+  Future<List<FormEntry>> fetch() async {
     final source = await rootBundle.loadString("assets/example.json");
     final List<dynamic> jsonList = json.decode(source);
     return jsonList.map((item) => FormEntry.fromJson(item)).toList();
@@ -21,4 +21,4 @@ class ExamplePolicy implements DataPolicy {
 }
 
 // Choose policy here
-const DataPolicy activePolicy = ExamplePolicy();
+const FetchPolicy activeFetchPolicy = ExamplePolicy();
