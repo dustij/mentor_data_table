@@ -1,24 +1,25 @@
+import "dart:io";
+
 import "package:flutter/material.dart";
+import "package:flutter/scheduler.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 
 import "../provider/form_entries_provider.dart";
 import "../provider/form_entry.dart";
+import "../widget/search_bar.dart";
 
 class MentorTable extends HookConsumerWidget {
   const MentorTable({super.key});
 
   List<DataColumn> _createColumns(WidgetRef ref) {
-    final notifier = ref.read(formEntriesProvider.notifier);
     return FormEntry.fields.map((field) {
       return DataColumn(
         label: Text(field),
         onSort: (_, _) {
           // Get the function for the selected column to compare its values between two rows.
-          // final getter = FormEntry.fieldGetters[field]!;
-          // notifier.sortBy(field, (a, b) => getter(a).compareTo(getter(b)));
-          notifier.sortBy(field, (a, b) => a[field].compareTo(b[field]));
+          ref.read(sortFieldProvider.notifier).state = field;
         },
       );
     }).toList();
@@ -69,26 +70,7 @@ class MentorTable extends HookConsumerWidget {
           Row(
             children: [
               // Search Field
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    hintText: "Search",
-                    border: OutlineInputBorder(),
-                    suffixIcon: hasText.value
-                        ? IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              controller.clear();
-                              _search("", ref);
-                            },
-                          )
-                        : null,
-                  ),
-                  onSubmitted: (value) => _search(value, ref),
-                ),
-              ),
+              Expanded(child: MySearchBar()),
               SizedBox(width: 8),
               // Filter Button
               ElevatedButton.icon(

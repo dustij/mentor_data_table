@@ -6,7 +6,7 @@ part of 'form_entries_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$formEntriesHash() => r'588ff50d571698ae008328595455028edc1277ad';
+String _$formEntriesHash() => r'e8ec8f2529331e47da153662e56129c54b655d8f';
 
 /// See also [FormEntries].
 @ProviderFor(FormEntries)
