@@ -1,29 +1,35 @@
+enum Field {
+  mentorName("Mentor Name"),
+  studentName("Student Name"),
+  sessionDetails("Session Details"),
+  notes("Notes");
+
+  final String field;
+  const Field(this.field);
+
+  @override
+  String toString() => field;
+}
+
 class FormEntry {
   final String mentorName;
   final String studentName;
   final String sessionDetails;
   final String notes;
 
-  static const List<String> fields = [
-    "Mentor Name",
-    "Student Name",
-    "Session Details",
-    "Notes",
-  ];
+  static const List<Field> fields = Field.values;
 
   /// Allow dynamic access to fields by name
-  dynamic operator [](String key) {
-    switch (key) {
-      case 'Mentor Name':
+  dynamic operator [](Field field) {
+    switch (field) {
+      case Field.mentorName:
         return mentorName;
-      case 'Student Name':
+      case Field.studentName:
         return studentName;
-      case 'Session Details':
+      case Field.sessionDetails:
         return sessionDetails;
-      case 'Notes':
+      case Field.notes:
         return notes;
-      default:
-        throw ArgumentError('Invalid field name: $key');
     }
   }
 

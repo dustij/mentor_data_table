@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import 'package:mentor_data_table/screen/mentor_table.dart';
+import "views/table_screen.dart";
 
 void main() {
   runApp(ProviderScope(child: const MainApp()));
@@ -13,6 +13,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: MentorTable());
+    return const MaterialApp(home: TableScreen());
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'form_entry.dart';
+import '../models/form_entry.dart';
 
 abstract interface class FetchPolicy {
   Future<List<FormEntry>> fetch();
@@ -15,9 +15,14 @@ class ExamplePolicy implements FetchPolicy {
   @override
   Future<List<FormEntry>> fetch() async {
     final source = await rootBundle.loadString("assets/example.json");
-    final List<dynamic> jsonList = json.decode(source);
-    return jsonList.map((item) => FormEntry.fromJson(item)).toList();
+    return _parseJson(source);
   }
+}
+
+/// Parses a JSON string into a list of [FormEntry] objects.
+List<FormEntry> _parseJson(String source) {
+  final List<dynamic> jsonList = json.decode(source);
+  return jsonList.map((e) => FormEntry.fromJson(e)).toList();
 }
 
 // Choose policy here
