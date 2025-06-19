@@ -53,7 +53,6 @@ class TableController extends _$TableController {
   }
 
   void toggleSort(Field column) {
-    // FIXME: sorting works but not as intended, I want it to combine sorted columns instead of prioritize and only sort one column at a time
     final current = state.requireValue;
     final updatedSort = _updateSortOrder(current.sortOrder, column);
     final newFiltered = _filterEntries(
@@ -127,16 +126,19 @@ class TableController extends _$TableController {
         ? entries.where((entry) => filter.matches(entry)).toList()
         : List<FormEntry>.from(entries);
 
-    // Apply sorting for each column in the sort order, starting with the lowest priority.
-    // Sorting is stable and applied in reverse order so that higher priority columns take precedence.
-    for (final sort in sortOrder.reversed) {
-      filtered.sort((a, b) {
+    // Apply cascading sort based on the provided sort order.
+    filtered.sort((a, b) {
+      // TODO: does this work correctly?
+      for (final sort in sortOrder) {
         final aVal = a[sort.column];
         final bVal = b[sort.column];
         final result = aVal.compareTo(bVal);
-        return sort.direction == SortDirection.ascending ? result : -result;
-      });
-    }
+        if (result != 0) {
+          return sort.direction == SortDirection.ascending ? result : -result;
+        }
+      }
+      return 0;
+    });
 
     return filtered;
   }
