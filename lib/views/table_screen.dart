@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:mentor_data_table/providers/table_controller.dart";
 
-import "../models/form_entry.dart";
+import "package:mentor_data_table/providers/table_controller.dart";
+import "package:mentor_data_table/widgets/form_entry_table.dart";
+import "package:mentor_data_table/widgets/table_search_bar.dart";
 
 class TableScreen extends HookConsumerWidget {
   const TableScreen({super.key});
@@ -18,7 +19,11 @@ class TableScreen extends HookConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: SearchAnchor.bar(suggestionsBuilder: (_, _) => []),
+                child: TableSearchBar(
+                  onSearch: (query) => ref
+                      .read(tableControllerProvider.notifier)
+                      .setSearchQuery(query),
+                ),
               ),
             ],
           ),
@@ -27,39 +32,18 @@ class TableScreen extends HookConsumerWidget {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, _) => Text('Error: $e'),
               data: (state) {
-                return SizedBox.expand(
-                  child: SingleChildScrollView(
-                    child: DataTable(
-                      columns: FormEntry.fields
-                          .map((label) => _buildColumn(ref, label))
-                          .toList(),
-                      rows: state.filteredData
-                          .map((data) => _buildRow(data))
-                          .toList(),
-                    ),
-                  ),
+                return FormEntryTable(
+                  entries: state.filteredData,
+                  onSort: (field) => ref
+                      .read(tableControllerProvider.notifier)
+                      .toggleSort(field),
+                  sortOrder: state.sortOrder,
                 );
               },
             ),
           ),
         ],
       ),
-    );
-  }
-
-  DataColumn _buildColumn(WidgetRef ref, Field field) {
-    return DataColumn(
-      label: Text(field.toString()),
-      onSort: (_, _) =>
-          ref.read(tableControllerProvider.notifier).toggleSort(field),
-    );
-  }
-
-  DataRow _buildRow(FormEntry data) {
-    return DataRow(
-      cells: FormEntry.fields
-          .map((label) => DataCell(Text(data[label])))
-          .toList(),
     );
   }
 }

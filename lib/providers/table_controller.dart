@@ -5,33 +5,35 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../data/fetch_policy.dart";
 import "../models/form_entry.dart";
+import "../models/sort_state.dart";
 import "../models/table_state.dart";
 
 // Generated code lives in part
 // to generate run: `flutter pub run build_runner build --delete-conflicting-outputs`
 part "table_controller.g.dart";
 
-/// [TableController] manages the state of the table including data fetching,
-/// multi-column sorting, and text-based filtering.
+/// [TableController] manages the state of the data table including
+/// asynchronous data fetching, multi-column sorting, and search/filter functionality.
 ///
-/// It supports tri-state sorting (ascending, descending, none) on each column,
-/// and allows multiple columns to be sorted in prioritized order. Sorting is
-/// toggled by calling [toggleSort] with a column name.
+/// - Sorting: Supports tri-state sorting (ascending, descending, none) on each column.
+///   The sort order reflects the sequence in which columns were clicked. Columns retain
+///   their position in the list unless removed by toggling back to "none."
 ///
-/// Filtering is performed using a search query that matches any field in the
-/// [FormEntry], such as mentor name, student name, session details, or notes.
-/// The filtered and sorted result is stored in [TableState.filteredData].
+/// - Filtering: Allows both simple search queries across all fields and complex logical
+///   filters using composable [FilterQuery] instances like [AndFilter], [OrFilter], and [FieldContains].
 ///
-/// In addition to simple search, the controller is designed to support
-/// complex filtering logic, where multiple filter criteria can be combined
-/// to refine the results further.
+/// - Data Source: Data is loaded using a policy pattern abstraction via [FetchPolicy],
+///   enabling modular fetching strategies (e.g., from a local JSON file or remote API).
+///
+/// The resulting filtered and sorted data is stored in [TableState.filteredData],
+/// and updates are triggered through [toggleSort] or [setSearchQuery]. TODO: after adding complex filtering, update this documentation
 @riverpod
 class TableController extends _$TableController {
   @override
   FutureOr<TableState> build() async {
-    // simulated delay, remove later
-    // await Future.delayed(const Duration(seconds: 2)); // this lets spinner animate
-    final data = await fetchEntries(); // this blocks
+    // simulated delay, don't ship in production
+    // await Future.delayed(const Duration(seconds: 2));
+    final data = await fetchEntries();
     return TableState(
       originalData: data,
       filteredData: data,
@@ -66,41 +68,65 @@ class TableController extends _$TableController {
     );
   }
 
-  /// Updates the list of [SortState]s based on a new column interaction.
+  void setSearchQuery(String query) {
+    final current = state.requireValue;
+
+    final filter = OrFilter([
+      for (final field in Field.values) FieldContains(field, query),
+    ]);
+
+    final newFiltered = _filterEntries(
+      current.originalData,
+      filter,
+      current.sortOrder,
+    );
+
+    state = AsyncData(
+      current.copyWith(filterQuery: filter, filteredData: newFiltered),
+    );
+  }
+
+  /// Updates the list of [SortState]s based on user interaction with a column header.
   ///
-  /// If the specified [column] is already being sorted, its sort direction is cycled
-  /// in the following order: none → ascending → descending → none.
+  /// This method cycles the sort direction of the given [column] in the order:
+  /// none → ascending → descending → none.
   ///
-  /// The updated column is moved to the beginning of the list to give it the highest
-  /// priority in multi-column sorting. If the new direction is `none`, the column
-  /// is removed from the sort order entirely.
+  /// If the column is already in the sort order, its previous state is removed.
+  /// If the new direction is not `none`, the column is reinserted at its previous index,
+  /// maintaining the sequence in which columns were clicked.
+  ///
+  /// This preserves the sort precedence order without re-prioritizing columns,
+  /// allowing stable cascading multi-column sorting based on click sequence.
   List<SortState> _updateSortOrder(List<SortState> current, Field column) {
     // Check if the column is already in the current sort order.
     // If not found, return a default SortState with no direction.
-    final existing = current.firstWhere(
-      (s) => s.column == column,
-      orElse: () => const SortState(
-        column: Field.mentorName,
-        direction: SortDirection.none,
-      ),
-    );
+    final existingIndex = current.indexWhere((s) => s.column == column);
+    final currentDirection = existingIndex == -1
+        ? SortDirection.none
+        : current[existingIndex].direction;
 
     // Determine the next sort direction in the tri-state cycle:
-    SortDirection nextDirection = switch (existing.direction) {
+    SortDirection nextDirection = switch (currentDirection) {
       SortDirection.none => SortDirection.ascending,
       SortDirection.ascending => SortDirection.descending,
       SortDirection.descending => SortDirection.none,
     };
 
-    // Remove the existing sort entry for the column, if present.
-    // Then insert the new sort state at the beginning of the list
-    // to give it highest priority during sorting.
-    var newSortOrder = List<SortState>.from(
-      current.where((s) => s.column != column),
-    );
+    // Copy state (follow rules for keeping state immutable)
+    final newSortOrder = List<SortState>.from(current);
+
+    // If column's sort state existed, remove it from the list
+    if (existingIndex != -1) {
+      newSortOrder.removeAt(existingIndex);
+    }
+
+    // If the direction is declared, insert the new sort state in its old position for this column
     if (nextDirection != SortDirection.none) {
+      final insertIndex = existingIndex != -1
+          ? existingIndex
+          : newSortOrder.length;
       newSortOrder.insert(
-        0,
+        insertIndex,
         SortState(column: column, direction: nextDirection),
       );
     }
@@ -128,7 +154,6 @@ class TableController extends _$TableController {
 
     // Apply cascading sort based on the provided sort order.
     filtered.sort((a, b) {
-      // TODO: does this work correctly?
       for (final sort in sortOrder) {
         final aVal = a[sort.column];
         final bVal = b[sort.column];

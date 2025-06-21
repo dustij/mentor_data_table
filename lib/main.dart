@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+import "theme/shadcn_theme.dart";
 import "views/table_screen.dart";
 
 void main() {
@@ -13,6 +14,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: TableScreen());
+    return MaterialApp(theme: shadcnTheme, home: TableScreen());
   }
 }
