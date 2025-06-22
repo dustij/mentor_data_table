@@ -22,9 +22,9 @@ class TableScreen extends HookConsumerWidget {
               children: [
                 Expanded(
                   child: TableSearchBar(
-                    onSearch: (query) => ref
+                    onSearch: (value) => ref
                         .read(tableControllerProvider.notifier)
-                        .setSearchQuery(query),
+                        .search(value),
                   ),
                 ),
                 SizedBox(width: 8),

@@ -1,3 +1,5 @@
+import "package:mentor_data_table/providers/filter_service.dart";
+import "package:mentor_data_table/providers/sort_service.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../data/fetch_policy.dart";
@@ -26,7 +28,7 @@ part "table_controller.g.dart";
 ///   enabling modular fetching strategies (e.g., from a local JSON file or remote API).
 ///
 /// The resulting filtered and sorted data is stored in [TableState.resultSet],
-/// and updates are triggered through [toggleSort] or [setSearchQuery]. TODO: after adding complex filtering, update this documentation
+/// and updates are triggered through [toggleSort] or [search]. TODO: after adding complex filtering, update this documentation
 @riverpod
 class TableController extends _$TableController {
   @override
@@ -44,37 +46,79 @@ class TableController extends _$TableController {
 
   void toggleSort(Field column) {
     final current = state.requireValue;
-    final updatedSort = _updateSortOrder(current.sortOrder, column);
-    final newFiltered = _filterEntries(
-      current.originalData,
-      current.filters,
-      updatedSort,
+    final sortSvc = ref.watch(sortServiceProvider);
+    final filterSvc = ref.watch(filterServiceProvider);
+
+    // Update sort order
+    final updatedSort = sortSvc.updateSortOrder(
+      currentOrder: current.sortOrder,
+      field: column,
     );
 
-    state = AsyncData(
-      current.copyWith(sortOrder: updatedSort, resultSet: newFiltered),
+    // Apply filters
+    final filterd = filterSvc.applyFilters(
+      data: current.originalData,
+      filters: current.filters,
     );
+
+    // Sort filtered data
+    final sorted = sortSvc.applySort(data: filterd, sortOrder: updatedSort);
+
+    state = AsyncData(
+      current.copyWith(sortOrder: updatedSort, resultSet: sorted),
+    );
+
+    // TODO: delete this
+    // final updatedSort = _updateSortOrder(current.sortOrder, column);
+    // final newFiltered = _filterEntries(
+    //   current.originalData,
+    //   current.filters,
+    //   updatedSort,
+    // );
+    // state = AsyncData(
+    //   current.copyWith(sortOrder: updatedSort, resultSet: newFiltered),
+    // );
   }
 
-  void setSearchQuery(String query) {
+  void search(String value) {
     final current = state.requireValue;
+    final sortSvc = ref.watch(sortServiceProvider);
+    final filterSvc = ref.watch(filterServiceProvider);
 
+    // Simple search across all fields
     final filter = OrFilter([
-      for (final field in Field.values) FieldContains(field, query),
+      for (final field in Field.values) FieldContains(field, value),
     ]);
 
-    final newFiltered = _filterEntries(current.originalData, [
-      filter,
-    ], current.sortOrder);
-
-    state = AsyncData(
-      current.copyWith(filters: [filter], resultSet: newFiltered),
+    // Apply filters
+    final filtered = filterSvc.applyFilters(
+      data: current.originalData,
+      filters: [filter],
     );
+
+    // Sort filterd data
+    final sorted = sortSvc.applySort(
+      data: filtered,
+      sortOrder: current.sortOrder,
+    );
+
+    state = AsyncData(current.copyWith(filters: [filter], resultSet: sorted));
+
+    // TODO - delete this
+    // final newFiltered = _filterEntries(current.originalData, [
+    //   filter,
+    // ], current.sortOrder);
+    // state = AsyncData(
+    //   current.copyWith(filters: [filter], resultSet: newFiltered),
+    // );
   }
 
   void addFilter(FilterQuery filter) {
     // TODO: implement this
   }
+
+  // ============================================================================
+  // TODO: EVERYTHING BELOW WILL BE REFACTORED AWAY
 
   /// Updates the list of [SortState]s based on user interaction with a column header.
   ///
