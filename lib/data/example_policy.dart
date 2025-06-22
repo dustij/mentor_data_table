@@ -1,0 +1,16 @@
+import "package:flutter/services.dart" show rootBundle;
+
+import "../models/form_entry.dart";
+
+import "fetch_policy.dart";
+
+/// Example policy used for development and debugging.
+/// It loads dummy data from a local JSON file.
+class ExamplePolicy implements FetchPolicy {
+  const ExamplePolicy();
+  @override
+  Future<List<FormEntry>> fetch() async {
+    final source = await rootBundle.loadString("assets/example.json");
+    return FetchPolicy.parseJson(source);
+  }
+}

@@ -1,4 +1,4 @@
-import 'form_entry.dart';
+import "form_entry.dart";
 
 /// Represents a query used to filter [FormEntry] instances.
 /// A filter query can be a single condition or a combination of conditions using AND/OR logic.

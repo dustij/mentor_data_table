@@ -7,26 +7,26 @@ class TableState {
   final List<FormEntry> originalData;
   final List<FormEntry> filteredData;
   final List<SortState> sortOrder;
-  final FilterQuery filterQuery;
+  final List<FilterQuery> filters;
 
   TableState({
     required this.originalData,
     required this.filteredData,
     required this.sortOrder,
-    required this.filterQuery,
+    required this.filters,
   });
 
   TableState copyWith({
     List<FormEntry>? originalData,
     List<FormEntry>? filteredData,
     List<SortState>? sortOrder,
-    FilterQuery? filterQuery,
+    List<FilterQuery>? filters,
   }) {
     return TableState(
       originalData: originalData ?? this.originalData,
       filteredData: filteredData ?? this.filteredData,
       sortOrder: sortOrder ?? this.sortOrder,
-      filterQuery: filterQuery ?? this.filterQuery,
+      filters: filters ?? this.filters,
     );
   }
 }

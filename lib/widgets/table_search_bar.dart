@@ -27,7 +27,7 @@ class TableSearchBar extends HookWidget {
                   icon: const Icon(Icons.clear),
                   onPressed: () {
                     controller.clear();
-                    onSearch('');
+                    onSearch("");
                   },
                 ),
               ]

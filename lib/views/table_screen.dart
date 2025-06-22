@@ -16,21 +16,37 @@ class TableScreen extends HookConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: TableSearchBar(
-                  onSearch: (query) => ref
-                      .read(tableControllerProvider.notifier)
-                      .setSearchQuery(query),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TableSearchBar(
+                    onSearch: (query) => ref
+                        .read(tableControllerProvider.notifier)
+                        .setSearchQuery(query),
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(width: 8),
+                FilledButton.icon(
+                  onPressed: () => [], // TODO
+                  label: Text("Filter"),
+                  icon: Icon(Icons.filter_list),
+                ),
+                Spacer(),
+                ElevatedButton.icon(
+                  onPressed: () => {}, // TODO
+                  icon: Icon(Icons.download),
+                  label: Text("Download"),
+                ),
+              ],
+            ),
           ),
+          Divider(),
           Expanded(
             child: tableState.when(
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Text('Error: $e'),
+              error: (e, _) => Text("Error: $e"),
               data: (state) {
                 return FormEntryTable(
                   entries: state.filteredData,

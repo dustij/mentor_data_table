@@ -1,12 +1,12 @@
-import "dart:developer";
-
-import "package:mentor_data_table/models/filter_query.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../data/fetch_policy.dart";
+import "../models/filter_query.dart";
 import "../models/form_entry.dart";
 import "../models/sort_state.dart";
 import "../models/table_state.dart";
+
+import "fetch_policy.dart";
 
 // Generated code lives in part
 // to generate run: `flutter pub run build_runner build --delete-conflicting-outputs`
@@ -33,25 +33,14 @@ class TableController extends _$TableController {
   FutureOr<TableState> build() async {
     // simulated delay, don't ship in production
     // await Future.delayed(const Duration(seconds: 2));
-    final data = await fetchEntries();
+    final policy = ref.watch(fetchPolicyProvider);
+    final data = await policy.fetch();
     return TableState(
       originalData: data,
       filteredData: data,
       sortOrder: [],
-      filterQuery: MatchAllFilter(),
+      filters: [MatchAllFilter()],
     );
-  }
-
-  Future<List<FormEntry>> fetchEntries() async {
-    try {
-      return await activeFetchPolicy.fetch();
-    } catch (e, stackTrace) {
-      log(
-        "An error occured while fetching entries: $e",
-        stackTrace: stackTrace,
-      );
-      return [];
-    }
   }
 
   void toggleSort(Field column) {
@@ -59,7 +48,7 @@ class TableController extends _$TableController {
     final updatedSort = _updateSortOrder(current.sortOrder, column);
     final newFiltered = _filterEntries(
       current.originalData,
-      current.filterQuery,
+      current.filters,
       updatedSort,
     );
 
@@ -75,15 +64,17 @@ class TableController extends _$TableController {
       for (final field in Field.values) FieldContains(field, query),
     ]);
 
-    final newFiltered = _filterEntries(
-      current.originalData,
+    final newFiltered = _filterEntries(current.originalData, [
       filter,
-      current.sortOrder,
-    );
+    ], current.sortOrder);
 
     state = AsyncData(
-      current.copyWith(filterQuery: filter, filteredData: newFiltered),
+      current.copyWith(filters: [filter], filteredData: newFiltered),
     );
+  }
+
+  void addFilter(FilterQuery filter) {
+    // TODO: implement this
   }
 
   /// Updates the list of [SortState]s based on user interaction with a column header.
@@ -134,22 +125,30 @@ class TableController extends _$TableController {
     return newSortOrder;
   }
 
-  /// Filters and sorts a list of [FormEntry]s based on the provided [filter] and [sortOrder].
+  /// Filters and sorts a list of [FormEntry]s based on the provided [filters] and [sortOrder].
   ///
-  /// The [filter], if provided, applies matching logic using the [FilterQuery] abstraction,
-  /// which can represent simple field-based conditions or complex combinations using AND/OR.
+  /// If [filters] are provided, each [FilterQuery] is applied in sequence to narrow down
+  /// the entries. This produces a logical AND behavior: all filters must match for an entry
+  /// to be included in the result.
   ///
-  /// Sorting is applied in reverse priority order so that earlier sort criteria take precedence.
-  /// Each sort applies a tri-state direction (ascending, descending, none) to the entries.
+  /// Complex filtering logic can be represented using combinations of [FieldContains],
+  /// [AndFilter], and [OrFilter] types.
+  ///
+  /// Sorting is applied after filtering. The [sortOrder] list reflects the sequence in which
+  /// columns were clicked. Columns are sorted in that order, without reprioritization.
   List<FormEntry> _filterEntries(
     List<FormEntry> entries,
-    FilterQuery? filter,
+    List<FilterQuery>? filters,
     List<SortState> sortOrder,
   ) {
-    // If a filter is provided, apply it to the entries.
-    // Otherwise, use the original list of entries as-is.
-    var filtered = filter != null
-        ? entries.where((entry) => filter.matches(entry)).toList()
+    // If filters are provided, apply each filter in sequence to narrow down the entries.
+    // Each filter acts on the result of the previous one, combining with logical AND behavior.
+    // If no filters are provided, use the original list of entries as-is.
+    final filtered = filters != null
+        ? filters.fold<List<FormEntry>>(
+            entries,
+            (previous, filter) => previous.where(filter.matches).toList(),
+          )
         : List<FormEntry>.from(entries);
 
     // Apply cascading sort based on the provided sort order.
