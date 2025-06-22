@@ -1,6 +1,6 @@
 import "package:mentor_data_table/models/form_entry.dart";
 
-enum SortDirection { ascending, descending, none }
+enum SortDirection { asc, desc, none }
 
 class SortState {
   final Field column;

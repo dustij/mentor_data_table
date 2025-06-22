@@ -25,7 +25,7 @@ part "table_controller.g.dart";
 /// - Data Source: Data is loaded using a policy pattern abstraction via [FetchPolicy],
 ///   enabling modular fetching strategies (e.g., from a local JSON file or remote API).
 ///
-/// The resulting filtered and sorted data is stored in [TableState.filteredData],
+/// The resulting filtered and sorted data is stored in [TableState.resultSet],
 /// and updates are triggered through [toggleSort] or [setSearchQuery]. TODO: after adding complex filtering, update this documentation
 @riverpod
 class TableController extends _$TableController {
@@ -33,11 +33,10 @@ class TableController extends _$TableController {
   FutureOr<TableState> build() async {
     // simulated delay, don't ship in production
     // await Future.delayed(const Duration(seconds: 2));
-    final policy = ref.watch(fetchPolicyProvider);
-    final data = await policy.fetch();
+    final data = await ref.watch(fetchPolicyProvider).fetch();
     return TableState(
       originalData: data,
-      filteredData: data,
+      resultSet: data,
       sortOrder: [],
       filters: [MatchAllFilter()],
     );
@@ -53,7 +52,7 @@ class TableController extends _$TableController {
     );
 
     state = AsyncData(
-      current.copyWith(sortOrder: updatedSort, filteredData: newFiltered),
+      current.copyWith(sortOrder: updatedSort, resultSet: newFiltered),
     );
   }
 
@@ -69,7 +68,7 @@ class TableController extends _$TableController {
     ], current.sortOrder);
 
     state = AsyncData(
-      current.copyWith(filters: [filter], filteredData: newFiltered),
+      current.copyWith(filters: [filter], resultSet: newFiltered),
     );
   }
 
@@ -98,9 +97,9 @@ class TableController extends _$TableController {
 
     // Determine the next sort direction in the tri-state cycle:
     SortDirection nextDirection = switch (currentDirection) {
-      SortDirection.none => SortDirection.ascending,
-      SortDirection.ascending => SortDirection.descending,
-      SortDirection.descending => SortDirection.none,
+      SortDirection.none => SortDirection.asc,
+      SortDirection.asc => SortDirection.desc,
+      SortDirection.desc => SortDirection.none,
     };
 
     // Copy state (follow rules for keeping state immutable)
@@ -158,7 +157,7 @@ class TableController extends _$TableController {
         final bVal = b[sort.column];
         final result = aVal.compareTo(bVal);
         if (result != 0) {
-          return sort.direction == SortDirection.ascending ? result : -result;
+          return sort.direction == SortDirection.asc ? result : -result;
         }
       }
       return 0;

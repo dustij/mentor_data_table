@@ -47,9 +47,9 @@ class FormEntryTable extends StatelessWidget {
       );
 
       Icon? sortIcon;
-      if (sortState.direction == SortDirection.ascending) {
+      if (sortState.direction == SortDirection.asc) {
         sortIcon = const Icon(Icons.arrow_upward, size: 16);
-      } else if (sortState.direction == SortDirection.descending) {
+      } else if (sortState.direction == SortDirection.desc) {
         sortIcon = const Icon(Icons.arrow_downward, size: 16);
       }
 

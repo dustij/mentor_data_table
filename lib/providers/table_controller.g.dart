@@ -21,7 +21,7 @@ String _$tableControllerHash() => r'9870c333a5f099b36a5a34684940e9fda1ef32b0';
 /// - Data Source: Data is loaded using a policy pattern abstraction via [FetchPolicy],
 ///   enabling modular fetching strategies (e.g., from a local JSON file or remote API).
 ///
-/// The resulting filtered and sorted data is stored in [TableState.filteredData],
+/// The resulting filtered and sorted data is stored in [TableState.resultSet],
 /// and updates are triggered through [toggleSort] or [setSearchQuery]. TODO: after adding complex filtering, update this documentation
 ///
 /// Copied from [TableController].

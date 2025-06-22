@@ -49,7 +49,7 @@ class TableScreen extends HookConsumerWidget {
               error: (e, _) => Text("Error: $e"),
               data: (state) {
                 return FormEntryTable(
-                  entries: state.filteredData,
+                  entries: state.resultSet,
                   onSort: (field) => ref
                       .read(tableControllerProvider.notifier)
                       .toggleSort(field),
