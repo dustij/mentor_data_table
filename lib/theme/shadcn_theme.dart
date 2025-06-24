@@ -38,6 +38,7 @@ final ThemeData shadcnTheme = ThemeData(
     onSurface: ShadcnColors.text,
     error: ShadcnColors.error,
     onError: Colors.white,
+    outline: ShadcnColors.border,
   ),
 
   // AppBar
