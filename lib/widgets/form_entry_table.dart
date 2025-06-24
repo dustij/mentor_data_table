@@ -3,6 +3,12 @@ import "package:flutter/material.dart";
 import "../models/form_entry.dart";
 import "../models/sort_state.dart";
 
+/// A widget that displays a list of [FormEntry] items in a scrollable table.
+///
+/// The table supports:
+/// - Columns defined by `FormEntry.fields`.
+/// - Sort indicators based on [sortOrder].
+/// - Column header taps invoking [onSort] with the associated [Field].
 class FormEntryTable extends StatelessWidget {
   final List<FormEntry> entries;
   final void Function(Field) onSort;
@@ -15,6 +21,7 @@ class FormEntryTable extends StatelessWidget {
     required this.sortOrder,
   });
 
+  /// Builds the scrollable DataTable containing the entries.
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
@@ -24,6 +31,7 @@ class FormEntryTable extends StatelessWidget {
     );
   }
 
+  /// Generates a [DataRow] for each [FormEntry] in [entries].
   List<DataRow> _buildRows() {
     return entries
         .map(
@@ -36,6 +44,8 @@ class FormEntryTable extends StatelessWidget {
         .toList();
   }
 
+  /// Generates sortable [DataColumn]s for each field, showing sort icons
+  /// based on [sortOrder] and handling taps via [onSort].
   List<DataColumn> _buildColumns() {
     return FormEntry.fields.map((field) {
       final sortState = sortOrder.firstWhere(

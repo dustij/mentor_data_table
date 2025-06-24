@@ -6,10 +6,19 @@ import "package:mentor_data_table/providers/table_controller.dart";
 import "package:mentor_data_table/widgets/form_entry_table.dart";
 import "package:mentor_data_table/widgets/table_search_bar.dart";
 
+/// A screen widget displaying the data table with search, filter, and download controls.
+///
+/// - Shows a loading spinner while data is being fetched.
+/// - Displays errors if fetching fails.
+/// - Renders a search bar and buttons for filtering and downloading.
+/// - Displays the table of entries with sort capabilities.
 class TableScreen extends HookConsumerWidget {
   const TableScreen({super.key});
 
   @override
+  /// Builds the UI hierarchy for the table screen, wiring up
+  /// state from [tableControllerProvider] and handlers for search
+  /// and sort interactions.
   Widget build(BuildContext context, WidgetRef ref) {
     final tableState = ref.watch(tableControllerProvider);
 

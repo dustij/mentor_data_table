@@ -11,6 +11,7 @@ enum Field {
   String toString() => field;
 }
 
+/// Represents a form entry with mentor and student details, session information, and notes.
 class FormEntry {
   final String mentorName;
   final String studentName;
@@ -19,7 +20,19 @@ class FormEntry {
 
   static const List<Field> fields = Field.values;
 
-  /// Allow dynamic access to fields by name
+  /// Returns the value of the given [field] for this entry.
+  ///
+  /// Example:
+  /// ```dart
+  /// final entry = FormEntry(
+  ///   mentorName: 'Alice',
+  ///   studentName: 'Bob',
+  ///   sessionDetails: 'Math tutoring',
+  ///   notes: 'Needs extra practice',
+  /// );
+  /// final mentor = entry[Field.mentorName]; // 'Alice'
+  /// final notes  = entry[Field.notes];      // 'Needs extra practice'
+  /// ```
   dynamic operator [](Field field) {
     switch (field) {
       case Field.mentorName:
@@ -33,6 +46,7 @@ class FormEntry {
     }
   }
 
+  /// Creates a new FormEntry instance with the given values.
   FormEntry({
     required this.mentorName,
     required this.studentName,
@@ -40,6 +54,7 @@ class FormEntry {
     required this.notes,
   });
 
+  /// Creates a FormEntry instance from a JSON map.
   factory FormEntry.fromJson(Map<String, dynamic> json) {
     return FormEntry(
       mentorName: json["mentorName"] ?? "",
