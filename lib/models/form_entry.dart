@@ -1,14 +1,16 @@
+/// Defines each column in a [FormEntry] and its display label.
 enum Field {
   mentorName("Mentor Name"),
   studentName("Student Name"),
   sessionDetails("Session Details"),
   notes("Notes");
 
-  final String field;
-  const Field(this.field);
+  final String text;
+  const Field(this.text);
 
+  /// Returns the human-readable label for this field.
   @override
-  String toString() => field;
+  String toString() => text;
 }
 
 /// Represents a form entry with mentor and student details, session information, and notes.
@@ -18,21 +20,18 @@ class FormEntry {
   final String sessionDetails;
   final String notes;
 
+  /// A list of all [Field]s in their defined order, for dynamic table columns.
   static const List<Field> fields = Field.values;
 
-  /// Returns the value of the given [field] for this entry.
-  ///
-  /// Example:
-  /// ```dart
-  /// final entry = FormEntry(
-  ///   mentorName: 'Alice',
-  ///   studentName: 'Bob',
-  ///   sessionDetails: 'Math tutoring',
-  ///   notes: 'Needs extra practice',
-  /// );
-  /// final mentor = entry[Field.mentorName]; // 'Alice'
-  /// final notes  = entry[Field.notes];      // 'Needs extra practice'
-  /// ```
+  /// Creates a [FormEntry] with the given values for each field.
+  FormEntry({
+    required this.mentorName,
+    required this.studentName,
+    required this.sessionDetails,
+    required this.notes,
+  });
+
+  /// Returns the value for [field] in this entry.
   dynamic operator [](Field field) {
     switch (field) {
       case Field.mentorName:
@@ -46,15 +45,7 @@ class FormEntry {
     }
   }
 
-  /// Creates a new FormEntry instance with the given values.
-  FormEntry({
-    required this.mentorName,
-    required this.studentName,
-    required this.sessionDetails,
-    required this.notes,
-  });
-
-  /// Creates a FormEntry instance from a JSON map.
+  /// Deserializes a JSON map into a [FormEntry].
   factory FormEntry.fromJson(Map<String, dynamic> json) {
     return FormEntry(
       mentorName: json["mentorName"] ?? "",

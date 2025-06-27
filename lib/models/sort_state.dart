@@ -1,4 +1,4 @@
-import "package:mentor_data_table/models/form_entry.dart";
+import "form_entry.dart";
 
 /// Enum representing the direction of sorting to apply.
 /// - `asc`: sort in ascending order.
@@ -17,5 +17,5 @@ class SortState {
 
   /// Returns a string representation like "Column Label - direction".
   @override
-  String toString() => "${column.field} - ${direction.name}";
+  String toString() => "${column.text} - ${direction.name}";
 }

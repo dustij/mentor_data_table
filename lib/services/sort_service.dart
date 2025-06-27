@@ -8,20 +8,20 @@ import "../models/sort_state.dart";
 class SortService {
   /// Updates the sort order list based on toggling [column].
   ///
-  /// - [currentOrder]: the existing list of sort states in precedence order.
+  /// - [sortOrder]: the existing list of sort states in precedence order.
   /// - [column]: the column whose sort direction is toggled.
   ///
   /// Returns a new list of `SortState` reflecting the updated direction and order.
   List<SortState> updateSortOrder({
-    required List<SortState> currentOrder,
+    required List<SortState> sortOrder,
     required Field column,
   }) {
     // Check if the column is already in the current sort order.
     // If not found, return a default SortState with no direction.
-    final existingIndex = currentOrder.indexWhere((s) => s.column == column);
+    final existingIndex = sortOrder.indexWhere((s) => s.column == column);
     final currentDirection = existingIndex == -1
         ? SortDirection.none
-        : currentOrder[existingIndex].direction;
+        : sortOrder[existingIndex].direction;
 
     // Determine the next sort direction in the tri-state cycle:
     SortDirection nextDirection = switch (currentDirection) {
@@ -31,7 +31,7 @@ class SortService {
     };
 
     // Copy state (follow rules for keeping state immutable)
-    final newSortOrder = List<SortState>.from(currentOrder);
+    final newSortOrder = List<SortState>.from(sortOrder);
 
     // If column's sort state existed, remove it from the list
     if (existingIndex != -1) {
@@ -58,7 +58,7 @@ class SortService {
   /// comparing each pair of entries by the specified column in sequence. If two entries
   /// are equal on one column, the next column in the sequence is used to break ties.
   ///
-  /// - [items]: The original list of entries to sort. A new sorted list is returned,
+  /// - [entries]: The original list of entries to sort. A new sorted list is returned,
   ///   and the input list remains unmodified.
   /// - [sortOrder]: A list of [SortState] objects indicating which columns to sort by
   ///   and in which direction (ascending or descending). An empty [sortOrder] returns
@@ -66,14 +66,14 @@ class SortService {
   ///
   /// Returns a new `List<FormEntry>` sorted according to the specified order.
   List<FormEntry> applySort({
-    required List<FormEntry> items,
+    required List<FormEntry> entries,
     required List<SortState> sortOrder,
   }) {
     // Copy state (follow rules for keeping state immutable)
-    final newItems = List<FormEntry>.from(items);
+    final newEntries = List<FormEntry>.from(entries);
 
     // Apply cascading sort based on the provided sort order.
-    newItems.sort((a, b) {
+    newEntries.sort((a, b) {
       for (final sort in sortOrder) {
         final aVal = a[sort.column];
         final bVal = b[sort.column];
@@ -85,6 +85,6 @@ class SortService {
       return 0;
     });
 
-    return newItems;
+    return newEntries;
   }
 }

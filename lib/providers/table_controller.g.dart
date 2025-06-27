@@ -6,23 +6,13 @@ part of 'table_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tableControllerHash() => r'9870c333a5f099b36a5a34684940e9fda1ef32b0';
+String _$tableControllerHash() => r'd934387092a1405f1458cdfea1fa21a426198382';
 
-/// [TableController] manages the state of the data table including
-/// asynchronous data fetching, multi-column sorting, and search/filter functionality.
-///
-/// - Sorting: Supports tri-state sorting (ascending, descending, none) on each column.
-///   The sort order reflects the sequence in which columns were clicked. Columns retain
-///   their position in the list unless removed by toggling back to "none."
-///
-/// - Filtering: Allows both simple search queries across all fields and complex logical
-///   filters using composable [FilterQuery] instances like [AndFilter], [OrFilter], and [FieldContains].
-///
-/// - Data Source: Data is loaded using a policy pattern abstraction via [FetchPolicy],
-///   enabling modular fetching strategies (e.g., from a local JSON file or remote API).
-///
-/// The resulting filtered and sorted data is stored in [TableState.resultSet],
-/// and updates are triggered through [toggleSort] or [setSearchQuery]. TODO: after adding complex filtering, update this documentation
+/// Manages the state of the data table, including:
+/// - asynchronous loading of entries,
+/// - multi-column sorting,
+/// - searching and composable filters,
+/// - updating the result set in [TableState].
 ///
 /// Copied from [TableController].
 @ProviderFor(TableController)

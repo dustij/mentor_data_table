@@ -1,5 +1,4 @@
-import "package:mentor_data_table/models/filter_query.dart";
-
+import "filter_query.dart";
 import "form_entry.dart";
 import "sort_state.dart";
 

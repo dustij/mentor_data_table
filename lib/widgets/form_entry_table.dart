@@ -36,6 +36,9 @@ class FormEntryTable extends StatelessWidget {
     return entries
         .map(
           (data) => DataRow(
+            key: ValueKey(
+              '${data.mentorName}-${data.studentName}-${data.sessionDetails}',
+            ),
             cells: FormEntry.fields
                 .map((label) => DataCell(Text(data[label])))
                 .toList(),

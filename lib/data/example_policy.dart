@@ -9,7 +9,7 @@ import "fetch_policy.dart";
 class ExamplePolicy implements FetchPolicy {
   @override
   Future<List<FormEntry>> fetch() async {
-    final source = await rootBundle.loadString("assets/example.json");
+    final source = await rootBundle.loadString("examples/example.json");
     return FetchPolicy.parseJson(source);
   }
 }

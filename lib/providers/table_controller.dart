@@ -1,10 +1,12 @@
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../data/example_policy.dart";
-import "../data/fetch_policy.dart";
 import "../models/filter_query.dart";
+import "../models/filter_rule.dart";
 import "../models/form_entry.dart";
+import "../models/sort_state.dart";
 import "../models/table_state.dart";
+import "../providers/filter_controller.dart";
 import "../services/fetch_service.dart";
 import "../services/filter_service.dart";
 import "../services/sort_service.dart";
@@ -35,64 +37,70 @@ class TableController extends _$TableController {
     );
   }
 
-  /// Toggles the sort direction of [column], reapplies the current filter,
-  /// sorts the filtered entries, and updates [TableState.resultSet].
+  /// Toggles the sort direction for [column], re-applies the existing filter,
+  /// and updates the table state with the new sorted result set.
   void toggleSort(Field column) {
     final current = state.requireValue;
     final sortSvc = SortService();
-    final filterSvc = FilterService();
 
-    // Update sort order
     final updatedSort = sortSvc.updateSortOrder(
-      currentOrder: current.sortOrder,
+      sortOrder: current.sortOrder,
       column: column,
     );
 
-    // Apply filter
-    final filterd = filterSvc.applyFilter(
-      items: current.originalData,
-      filter: current.filter,
-    );
-
-    // Sort filtered data
-    final sorted = sortSvc.applySort(items: filterd, sortOrder: updatedSort);
-
-    state = AsyncData(
-      current.copyWith(sortOrder: updatedSort, resultSet: sorted),
-    );
+    _setState(sortOrder: updatedSort);
   }
 
-  /// Builds a composite OR filter matching [value] across all fields,
-  /// applies it to the data, re-sorts using the current sort order,
-  /// and updates [TableState] accordingly.
-  void search(String value) {
+  /// Applies a search filter for [text] across all fields,
+  /// then updates the table state to reflect the filtered result set.
+  void search(String text) {
+    ref.read(filterControllerProvider.notifier).applySearch(text);
+    final query = ref.read(filterControllerProvider);
+
+    _setState(filter: query);
+  }
+
+  /// Adds the given [filter] rule to the composite filter,
+  /// then updates the table state with the new filtered result set.
+  void addFilter(FilterRule filter) {
+    ref.read(filterControllerProvider.notifier).addFilter(filter);
+    final query = ref.read(filterControllerProvider);
+
+    _setState(filter: query);
+  }
+
+  /// Internal helper that recalculates and emits the filtered and sorted
+  /// [TableState.resultSet] based on optional overrides for [entries], [filter], and [sortOrder].
+  void _setState({
+    List<FormEntry>? entries,
+    FilterQuery? filter,
+    List<SortState>? sortOrder,
+  }) {
     final current = state.requireValue;
     final sortSvc = SortService();
     final filterSvc = FilterService();
 
-    // Simple search across all fields
-    final filter = FilterBuilder().orGroup([
-      for (final field in Field.values) FieldContains(field, value),
-    ]).build();
+    entries ??= current.originalData;
+    filter ??= current.filter;
+    sortOrder ??= current.sortOrder;
 
     // Apply filter
-    final filtered = filterSvc.applyFilter(
-      items: current.originalData,
-      filter: filter,
-    );
+    final filtered = filterSvc.applyFilter(entries: entries, filter: filter);
 
     // Sort filterd data
-    final sorted = sortSvc.applySort(
-      items: filtered,
-      sortOrder: current.sortOrder,
+    final List<FormEntry> resultSet;
+    if (sortOrder.isEmpty) {
+      resultSet = filtered;
+    } else {
+      resultSet = sortSvc.applySort(entries: filtered, sortOrder: sortOrder);
+    }
+
+    state = AsyncData(
+      current.copyWith(
+        filter: filter,
+        sortOrder: sortOrder,
+        resultSet: resultSet,
+      ),
     );
-
-    state = AsyncData(current.copyWith(filter: filter, resultSet: sorted));
-  }
-
-  /// Adds the given [filter] to the existing filter composition,
-  /// reapplies filtering and sorting, and updates [TableState].
-  void addFilter(FilterQuery filter) {
-    // TODO: implement this
   }
 }
