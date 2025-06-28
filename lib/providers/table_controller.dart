@@ -69,6 +69,10 @@ class TableController extends _$TableController {
     _setState(filter: query);
   }
 
+  List<FilterQuery> getActiveFilters() {
+    return ref.read(filterControllerProvider.notifier).getActiveFilters();
+  }
+
   /// Internal helper that recalculates and emits the filtered and sorted
   /// [TableState.resultSet] based on optional overrides for [entries], [filter], and [sortOrder].
   void _setState({

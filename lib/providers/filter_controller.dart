@@ -8,6 +8,8 @@ import "../models/form_entry.dart";
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
 part "filter_controller.g.dart";
 
+/// INTERNAL PACKAGE USAGE ONLY (use [TableController])
+///
 /// Manages the set of active filter rules and produces a composite [FilterQuery].
 ///
 /// - `build` initializes to no filtering (match all).
@@ -28,9 +30,9 @@ class FilterController extends _$FilterController {
     final builder = ref.read(_filterBuilderProvider.notifier);
     switch (filter.operator) {
       case FilterOperator.includes:
-        builder.whereContains(column: filter.field, text: filter.text);
+        builder.whereContains(column: filter.field, text: filter.value);
       case FilterOperator.equals:
-        builder.whereEquals(column: filter.field, text: filter.text);
+        builder.whereEquals(column: filter.field, text: filter.value);
     }
     state = builder.buildQuery();
   }
@@ -42,6 +44,10 @@ class FilterController extends _$FilterController {
       for (final field in Field.values) FieldContains(field, text),
     ]);
     state = builder.buildQuery();
+  }
+
+  List<FilterQuery> getActiveFilters() {
+    return ref.read(_filterBuilderProvider).getRules();
   }
 }
 
@@ -94,6 +100,6 @@ class _FilterBuilder extends _$FilterBuilder {
 
   /// Returns the current list of filter clauses in insertion order.
   List<FilterQuery> getRules() {
-    return List.from(_clauses);
+    return _clauses.map((f) => f.clone()).toList();
   }
 }

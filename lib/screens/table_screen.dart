@@ -30,14 +30,14 @@ class TableScreen extends HookConsumerWidget {
     final filterLink = useRef(LayerLink()).value;
 
     return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          if (isFilterOpen.value) isFilterOpen.value = false;
-        },
-        behavior: HitTestBehavior.opaque,
-        child: Stack(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              if (isFilterOpen.value) isFilterOpen.value = false;
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Column(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -97,23 +97,25 @@ class TableScreen extends HookConsumerWidget {
                 ),
               ],
             ),
-            if (isFilterOpen.value)
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: () => isFilterOpen.value = false,
-                  behavior: HitTestBehavior.translucent,
-                  child: const SizedBox.expand(),
-                ),
+          ),
+          if (isFilterOpen.value)
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => isFilterOpen.value = false,
+                behavior: HitTestBehavior.translucent,
+                child: const SizedBox.expand(),
               ),
-            if (isFilterOpen.value)
-              CompositedTransformFollower(
-                link: filterLink,
-                showWhenUnlinked: false,
-                offset: const Offset(0, 40),
-                child: const FilterBuilderDropdown(),
+            ),
+          if (isFilterOpen.value)
+            CompositedTransformFollower(
+              link: filterLink,
+              showWhenUnlinked: false,
+              offset: const Offset(0, 40),
+              child: FilterBuilderDropdown(
+                onClose: () => isFilterOpen.value = false,
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

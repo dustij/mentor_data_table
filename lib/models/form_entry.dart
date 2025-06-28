@@ -8,6 +8,14 @@ enum Field {
   final String text;
   const Field(this.text);
 
+  /// Returns the enum whose [text] matches [label], or throws if none match.
+  static Field fromText(String label) {
+    return Field.values.firstWhere(
+      (f) => f.text == label,
+      orElse: () => throw ArgumentError("Unknown field label: $label"),
+    );
+  }
+
   /// Returns the human-readable label for this field.
   @override
   String toString() => text;
