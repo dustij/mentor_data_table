@@ -1,0 +1,8 @@
+i need to rethink TableState and filters
+
+TableState should mimic the ui
+
+TableState should hold a list of filter rules so i can build the drop down from these rules
+
+clicking apply should then apply them, can probably just build the query and apply it in one step, maybe save 
+the query in state so that when sorting i dont have to rebuild the query, it may not matter though
