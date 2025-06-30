@@ -42,4 +42,6 @@ class TableState extends _$TableState {
       filters: filters,
     );
   }
+
+  void applySearchFilter(String value) {}
 }

@@ -6,7 +6,7 @@ part of 'table_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$tableStateHash() => r'fe0c7df54b49a261713d3a2adc9559f5e0228cd3';
+String _$tableStateHash() => r'a1a71a4af01a01383c833057f23bb68649adfc67';
 
 /// See also [TableState].
 @ProviderFor(TableState)
