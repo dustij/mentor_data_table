@@ -9,6 +9,10 @@ class Filter {
 
   Filter({required this.field, required this.value, required this.operator});
 
+  Filter clone() {
+    return Filter(field: field, value: value, operator: operator);
+  }
+
   @override
   String toString() => "${field.text} ${operator.name} $value";
 }

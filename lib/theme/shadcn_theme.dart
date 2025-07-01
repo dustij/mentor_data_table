@@ -144,3 +144,18 @@ final ThemeData shadcnTheme = ThemeData(
   // Search view styling
   searchViewTheme: const SearchViewThemeData(shrinkWrap: true),
 );
+
+/// A dedicated theme for delete-style outlined buttons (red-outlined).
+class ShadcnTheme {
+  ShadcnTheme._(); // private constructor
+
+  static final OutlinedButtonThemeData deleteOutlinedButtonTheme =
+      OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: ShadcnColors.error,
+          side: const BorderSide(color: ShadcnColors.error),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+      );
+}

@@ -10,6 +10,7 @@ class FilterListNotifier extends _$FilterListNotifier {
   @override
   List<Filter> build() => [];
 
+  void set(List<Filter> fs) => state = fs;
   void add(Filter f) => state = [...state, f];
   void remove(Filter f) => state = state.where((x) => x != f).toList();
   void clear() => state = [];
