@@ -1,21 +1,16 @@
 import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
-import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "package:mentor_data_table/providers/table_state.dart";
-import "package:mentor_data_table/services/download_service.dart";
-import "package:mentor_data_table/widgets/entries_table.dart";
-import "package:mentor_data_table/widgets/filter_menu.dart";
-import "package:mentor_data_table/widgets/table_search_bar.dart";
+import "package:mentor_data_table/ui/filter_menu.dart";
+import "package:mentor_data_table/ui/table_view.dart";
+import "package:mentor_data_table/ui/table_search_bar.dart";
 
-class TableScreen extends HookConsumerWidget {
+class TableScreen extends HookWidget {
   const TableScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final tableState = ref.watch(tableStateProvider);
-
+  Widget build(BuildContext context) {
     // Local state for showing filters menu
     final isFilterMenuOpen = useState(false);
 
@@ -52,8 +47,7 @@ class TableScreen extends HookConsumerWidget {
                       Spacer(),
                       ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: on success show a snackbar notification
-                          DownloadService().download(tableState.processedData);
+                          // TODO
                         },
                         icon: Icon(Icons.download),
                         label: Text("Download"),
@@ -61,16 +55,25 @@ class TableScreen extends HookConsumerWidget {
                     ],
                   ),
                 ),
-                Expanded(child: EntriesTable()),
+                Expanded(child: TableView()),
               ],
             ),
           ),
           // Filter Menu
           if (isFilterMenuOpen.value)
+            // Ensures filter menu actually closes
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () => isFilterMenuOpen.value = false,
+                behavior: HitTestBehavior.translucent,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          if (isFilterMenuOpen.value)
             CompositedTransformFollower(
               link: layerLink,
               showWhenUnlinked: false,
-              offset: Offset(0, 40),
+              offset: Offset(0, 80),
               child: FilterMenu(onClose: () => isFilterMenuOpen.value = false),
             ),
         ],
