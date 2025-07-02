@@ -6,6 +6,7 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "package:mentor_data_table/providers/search_notifier.dart";
+import "package:mentor_data_table/theme/shadcn_theme.dart";
 
 class TableSearchBar extends HookConsumerWidget {
   const TableSearchBar({super.key});
@@ -20,27 +21,30 @@ class TableSearchBar extends HookConsumerWidget {
 
     useDebouncedSearch(controller, onSearch);
 
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: SearchBar(
-        hintText: "Search",
-        controller: controller,
-        onSubmitted: onSearch,
-        trailing: controller.text.isNotEmpty
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    controller.clear();
-                    onSearch("");
-                  },
-                ),
-              ]
-            : null,
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 16.0),
+    return SearchBarTheme(
+      data: ShadcnTheme.tableSearchBarTheme,
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: SearchBar(
+          hintText: "Search",
+          controller: controller,
+          onSubmitted: onSearch,
+          trailing: controller.text.isNotEmpty
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      controller.clear();
+                      onSearch("");
+                    },
+                  ),
+                ]
+              : null,
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 16.0),
+          ),
+          leading: const Icon(Icons.search),
         ),
-        leading: const Icon(Icons.search),
       ),
     );
   }

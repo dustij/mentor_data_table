@@ -158,4 +158,22 @@ class ShadcnTheme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       );
+
+  static final SearchBarThemeData tableSearchBarTheme = SearchBarThemeData(
+    elevation: WidgetStateProperty.all(0),
+    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(
+        side: const BorderSide(color: ShadcnColors.border),
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    surfaceTintColor: WidgetStateProperty.all<Color>(ShadcnColors.surface),
+    overlayColor: WidgetStateProperty.all<Color>(ShadcnColors.surface),
+  );
+
+  static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
+    style: FilledButton.styleFrom(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+  );
 }

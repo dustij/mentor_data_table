@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
+import "package:mentor_data_table/theme/shadcn_theme.dart";
 
 import "package:mentor_data_table/ui/filter_menu.dart";
 import "package:mentor_data_table/ui/table_view.dart";
@@ -37,12 +38,15 @@ class TableScreen extends HookWidget {
                           child: TableSearchBar(),
                         ),
                       ),
-                      FilledButton.icon(
-                        onPressed: () {
-                          isFilterMenuOpen.value = !isFilterMenuOpen.value;
-                        },
-                        label: const Text("Filter"),
-                        icon: const Icon(Icons.filter_list),
+                      FilledButtonTheme(
+                        data: ShadcnTheme.filterButtonTheme,
+                        child: FilledButton.icon(
+                          onPressed: () {
+                            isFilterMenuOpen.value = !isFilterMenuOpen.value;
+                          },
+                          label: const Text("Filter"),
+                          icon: const Icon(Icons.filter_list),
+                        ),
                       ),
                       Spacer(),
                       ElevatedButton.icon(
