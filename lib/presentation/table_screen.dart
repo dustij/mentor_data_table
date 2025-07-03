@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mentor_data_table/providers/processed_data.dart";
+import "package:mentor_data_table/services/export/xls_export_service.dart";
 
 import "../providers/filter_list_notifier.dart";
 import "../theme/shadcn_theme.dart";
@@ -20,6 +22,9 @@ class TableScreen extends HookConsumerWidget {
     // For changing filter button when advance filter is applied (like Jotform's)
     final filterList = ref.watch(filterListNotifierProvider);
     final filterListNotifier = ref.read(filterListNotifierProvider.notifier);
+
+    // Data to export
+    final exportData = ref.watch(processedDataProvider);
 
     // Link to position, place menu below search bar
     final layerLink = useRef(LayerLink()).value;
@@ -64,7 +69,32 @@ class TableScreen extends HookConsumerWidget {
                       // ---------------------------------
                       ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: xls export service
+                          exportData.when(
+                            data: (data) {
+                              final exportService = XlsExportService();
+                              exportService.export(
+                                fileName: "test",
+                                context: context,
+                                data: data,
+                              );
+                            },
+                            error: (_, _) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Oops! Something went wrong.",
+                                    ),
+                                  ),
+                                ),
+                            loading: () =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      "Cool! Your download is started.",
+                                    ),
+                                  ),
+                                ),
+                          );
                         },
                         icon: Icon(Icons.download),
                         label: Text("Download"),
