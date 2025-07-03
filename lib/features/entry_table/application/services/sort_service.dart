@@ -3,8 +3,6 @@ import "../../domain/sort.dart";
 
 class SortService {
   List<Entry> applySort(List<Entry> entries, List<Sort> sortList) {
-    if (sortList.isEmpty) return entries;
-
     final newEntries = List<Entry>.from(entries);
 
     newEntries.sort((a, b) {

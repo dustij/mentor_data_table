@@ -4,7 +4,7 @@ import "../../domain/entry.dart";
 import "../../domain/sort.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
-part "sort_list_notifier.g.dart";
+part "gen/sort_list_notifier.g.dart";
 
 @riverpod
 class SortListNotifier extends _$SortListNotifier {

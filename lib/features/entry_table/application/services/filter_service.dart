@@ -20,8 +20,8 @@ class FilterService {
       }
     }
 
-    final newEntries = List<Entry>.from(entries);
     final filterQuery = _builder.buildQuery();
+    final newEntries = List<Entry>.from(entries);
 
     return newEntries.where((e) => filterQuery.matches(e)).toList();
   }

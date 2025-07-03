@@ -5,7 +5,7 @@ import "../../data/local_source.dart";
 import "../../domain/entry.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
-part "original_data.g.dart";
+part "gen/original_data.g.dart";
 
 @riverpod
 Future<List<Entry>> originalData(Ref ref) async {

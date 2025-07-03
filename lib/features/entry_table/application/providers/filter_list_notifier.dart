@@ -3,7 +3,7 @@ import "package:riverpod_annotation/riverpod_annotation.dart";
 import "../../domain/filter.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
-part "filter_list_notifier.g.dart";
+part "gen/filter_list_notifier.g.dart";
 
 @riverpod
 class FilterListNotifier extends _$FilterListNotifier {
