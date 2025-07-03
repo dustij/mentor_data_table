@@ -7,6 +7,6 @@ abstract class SourcePolicy {
 
   static List<Entry> parseJson(String source) {
     final List<dynamic> jsonList = json.decode(source);
-    return jsonList.map((e) => Entry.fromJson(e)).toList();
+    return jsonList.map<Entry>((e) => Entry.fromJson(e)).toList();
   }
 }
