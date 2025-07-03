@@ -1,8 +1,7 @@
 import "package:flutter/services.dart";
 
-import "../domain/entry.dart";
-
-import "source_policy.dart";
+import "package:mentor_data_table/data/source_policy.dart";
+import "package:mentor_data_table/models/entry.dart";
 
 class LocalSource implements SourcePolicy {
   final String path;

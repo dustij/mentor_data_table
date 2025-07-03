@@ -5,8 +5,8 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "../../../shared/theme/shadcn_theme.dart";
-import "../application/providers/search_notifier.dart";
+import "package:mentor_data_table/providers/search_notifier.dart";
+import "package:mentor_data_table/theme/shadcn_theme.dart";
 
 class TableSearchBar extends HookConsumerWidget {
   const TableSearchBar({super.key});

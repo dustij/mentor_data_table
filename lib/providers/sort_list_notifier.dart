@@ -1,10 +1,10 @@
+import "package:mentor_data_table/models/entry.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "../../domain/entry.dart";
-import "../../domain/sort.dart";
+import "package:mentor_data_table/models/sort.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
-part "gen/sort_list_notifier.g.dart";
+part "sort_list_notifier.g.dart";
 
 @riverpod
 class SortListNotifier extends _$SortListNotifier {
