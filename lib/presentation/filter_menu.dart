@@ -94,19 +94,19 @@ class FilterMenu extends HookConsumerWidget {
                       icon: Icon(Icons.add),
                       onPressed: () {
                         // Validate filter before adding to local state
-                        if (localFilterListState.value.last.isValid()) {
-                          localFilterListState.value = [
-                            ...localFilterListState.value,
-                            _FilterDraft.blank(),
-                          ];
-                        }
+                        // if (localFilterListState.value.last.isValid()) {
+                        localFilterListState.value = [
+                          ...localFilterListState.value,
+                          _FilterDraft.blank(),
+                        ];
+                        // }
                       },
                     ),
                     Spacer(),
                     Align(
                       alignment: Alignment.centerRight,
                       child: ElevatedButton(
-                        child: Text("Apply Filters"),
+                        child: Text("Apply Filter"),
                         onPressed: () {
                           _setFilters(filterListNotifier, localFilterListState);
                           onClose();
@@ -138,7 +138,6 @@ class _FilterForm extends StatelessWidget {
           Expanded(
             child: DropdownButtonFormField(
               decoration: InputDecoration(
-                filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -159,7 +158,6 @@ class _FilterForm extends StatelessWidget {
           Expanded(
             child: DropdownButtonFormField(
               decoration: InputDecoration(
-                filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
@@ -181,7 +179,6 @@ class _FilterForm extends StatelessWidget {
               key: ValueKey(filterDraft),
               controller: filterDraft.textController,
               decoration: InputDecoration(
-                filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),

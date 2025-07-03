@@ -3,6 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
+import "../providers/filter_list_notifier.dart";
 import "../theme/shadcn_theme.dart";
 import "../presentation/filter_menu.dart";
 import "../presentation/table_search_bar.dart";
@@ -15,6 +16,10 @@ class TableScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Local state for showing filters menu
     final isFilterMenuOpen = useState(false);
+
+    // For changing filter button when advance filter is applied (like Jotform's)
+    final filterList = ref.watch(filterListNotifierProvider);
+    final filterListNotifier = ref.read(filterListNotifierProvider.notifier);
 
     // Link to position, place menu below search bar
     final layerLink = useRef(LayerLink()).value;
@@ -39,7 +44,11 @@ class TableScreen extends HookConsumerWidget {
                           child: TableSearchBar(),
                         ),
                       ),
+                      // ---------------------------------
+                      // Filter Button
+                      // ---------------------------------
                       FilledButtonTheme(
+                        // TODO: make like Jotform
                         data: ShadcnTheme.filterButtonTheme,
                         child: FilledButton.icon(
                           onPressed: () {
@@ -50,6 +59,9 @@ class TableScreen extends HookConsumerWidget {
                         ),
                       ),
                       Spacer(),
+                      // ---------------------------------
+                      // Download Button
+                      // ---------------------------------
                       ElevatedButton.icon(
                         onPressed: () {
                           // TODO: xls export service

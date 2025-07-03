@@ -152,8 +152,8 @@ class ShadcnTheme {
   static final OutlinedButtonThemeData deleteOutlinedButtonTheme =
       OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: ShadcnColors.error,
-          side: const BorderSide(color: ShadcnColors.error),
+          foregroundColor: ShadcnColors.text,
+          side: const BorderSide(color: ShadcnColors.border),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
