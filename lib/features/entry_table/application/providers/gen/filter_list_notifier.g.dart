@@ -1,29 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'processed_data.dart';
+part of '../filter_list_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$processedDataHash() => r'bf84c7207a052bc9fd404b8ba6b0dcf6e2faaaa8';
+String _$filterListNotifierHash() =>
+    r'792a6749645e143bc594a9ae502767e7185e8a62';
 
-/// See also [ProcessedData].
-@ProviderFor(ProcessedData)
-final processedDataProvider =
-    AutoDisposeNotifierProvider<
-      ProcessedData,
-      AsyncValue<List<Entry>>
-    >.internal(
-      ProcessedData.new,
-      name: r'processedDataProvider',
+/// See also [FilterListNotifier].
+@ProviderFor(FilterListNotifier)
+final filterListNotifierProvider =
+    AutoDisposeNotifierProvider<FilterListNotifier, List<Filter>>.internal(
+      FilterListNotifier.new,
+      name: r'filterListNotifierProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$processedDataHash,
+          : _$filterListNotifierHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$ProcessedData = AutoDisposeNotifier<AsyncValue<List<Entry>>>;
+typedef _$FilterListNotifier = AutoDisposeNotifier<List<Filter>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

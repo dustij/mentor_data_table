@@ -1,4 +1,4 @@
-import "package:mentor_data_table/models/entry.dart";
+import "../../domain/entry.dart";
 
 class FilterQueryBuilder {
   final List<FilterQuery> _queries = [];

@@ -4,7 +4,7 @@
 /// customized styling for buttons, input fields, cards, typography, snackbar, and layout.
 library;
 
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 /// A set of custom colors derived from Tailwind CSS palette used in the app’s UI theme.
 class ShadcnColors {
@@ -25,7 +25,7 @@ class ShadcnColors {
 final ThemeData shadcnTheme = ThemeData(
   brightness: Brightness.light,
   // Use Inter
-  fontFamily: 'Inter',
+  fontFamily: "Inter",
 
   // ColorScheme backs most Material widgets
   colorScheme: ColorScheme(

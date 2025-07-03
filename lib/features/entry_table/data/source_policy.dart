@@ -1,6 +1,6 @@
 import "dart:convert";
 
-import "package:mentor_data_table/models/entry.dart";
+import "../domain/entry.dart";
 
 abstract class SourcePolicy {
   Future<List<Entry>> fetchAll();
