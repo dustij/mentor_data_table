@@ -3,10 +3,10 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "package:mentor_data_table/models/entry.dart";
-import "package:mentor_data_table/models/filter.dart";
-import "package:mentor_data_table/providers/filter_list_notifier.dart";
-import "package:mentor_data_table/theme/shadcn_theme.dart";
+import "../models/entry.dart";
+import "../models/filter.dart";
+import "../providers/filter_list_notifier.dart";
+import "../theme/shadcn_theme.dart";
 
 class FilterMenu extends HookConsumerWidget {
   final void Function() onClose;

@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "package:mentor_data_table/models/entry.dart";
-import "package:mentor_data_table/models/sort.dart";
-import "package:mentor_data_table/providers/sort_list_notifier.dart";
-import "package:mentor_data_table/providers/processed_data.dart";
+import "../models/entry.dart";
+import "../models/sort.dart";
+import "../providers/sort_list_notifier.dart";
+import "../providers/processed_data.dart";
 
 class TableView extends ConsumerWidget {
   const TableView({super.key});

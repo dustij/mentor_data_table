@@ -1,7 +1,7 @@
 import "package:mentor_data_table/models/entry.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "package:mentor_data_table/models/sort.dart";
+import "../models/sort.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
 part "sort_list_notifier.g.dart";

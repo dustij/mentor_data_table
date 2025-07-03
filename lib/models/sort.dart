@@ -1,4 +1,4 @@
-import "package:mentor_data_table/models/entry.dart";
+import "../models/entry.dart";
 
 enum SortDirection { asc, desc, none }
 

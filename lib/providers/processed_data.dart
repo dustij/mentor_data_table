@@ -1,12 +1,14 @@
-import "package:hooks_riverpod/hooks_riverpod.dart";
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "package:mentor_data_table/models/entry.dart";
-import "package:mentor_data_table/providers/filter_list_notifier.dart";
-import "package:mentor_data_table/providers/original_data.dart";
-import "package:mentor_data_table/providers/search_notifier.dart";
-import "package:mentor_data_table/providers/sort_list_notifier.dart";
-import "package:mentor_data_table/util/table_processor.dart";
+import "../models/entry.dart";
+import "../providers/filter_list_notifier.dart";
+import "../providers/original_data.dart";
+import "../providers/search_notifier.dart";
+import "../providers/sort_list_notifier.dart";
+import "../services/filter_query_builder.dart";
+import "../services/filter_service.dart";
+import "../services/search_service.dart";
+import "../services/sort_service.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
 part "processed_data.g.dart";
@@ -19,17 +21,20 @@ class ProcessedData extends _$ProcessedData {
     final filterList = ref.watch(filterListNotifierProvider);
     final searchText = ref.watch(searchNotifierProvider);
     final sortList = ref.watch(sortListNotifierProvider);
+
+    final filterService = FilterService(FilterQueryBuilder());
+    final searchService = SearchService(FilterQueryBuilder());
+    final sortService = SortService();
+
     return rawAsync.when(
       loading: () => const AsyncValue.loading(),
       error: (e, s) => AsyncValue.error(e, s),
       data: (originalData) {
-        final processed = TableProcessor.process(
-          originalData: originalData,
-          filterList: filterList,
-          searchText: searchText,
-          sortList: sortList,
-        );
-        return AsyncValue.data(processed);
+        var processedData = List<Entry>.from(originalData);
+        processedData = filterService.applyFilters(processedData, filterList);
+        processedData = searchService.applySearch(processedData, searchText);
+        processedData = sortService.applySort(processedData, sortList);
+        return AsyncValue.data(processedData);
       },
     );
   }

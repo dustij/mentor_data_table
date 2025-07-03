@@ -4,7 +4,7 @@ import "package:flutter/rendering.dart" show debugPaintSizeEnabled;
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "theme/shadcn_theme.dart";
-import "ui/table_screen.dart";
+import "presentation/table_screen.dart";
 
 void main() {
   debugPaintSizeEnabled = false;

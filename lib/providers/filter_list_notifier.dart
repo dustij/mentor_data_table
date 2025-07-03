@@ -1,6 +1,6 @@
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
-import "package:mentor_data_table/models/filter.dart";
+import "../models/filter.dart";
 
 // to generate run: `dart run build_runner build --delete-conflicting-outputs`
 part "filter_list_notifier.g.dart";

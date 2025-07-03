@@ -3,12 +3,10 @@ import "package:flutter/material.dart";
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
 
-import "package:mentor_data_table/providers/processed_data.dart";
-import "package:mentor_data_table/theme/shadcn_theme.dart";
-import "package:mentor_data_table/ui/filter_menu.dart";
-import "package:mentor_data_table/ui/table_search_bar.dart";
-import "package:mentor_data_table/ui/table_view.dart";
-import "package:mentor_data_table/util/download.dart";
+import "../theme/shadcn_theme.dart";
+import "../presentation/filter_menu.dart";
+import "../presentation/table_search_bar.dart";
+import "../presentation/table_view.dart";
 
 class TableScreen extends HookConsumerWidget {
   const TableScreen({super.key});
@@ -54,14 +52,7 @@ class TableScreen extends HookConsumerWidget {
                       Spacer(),
                       ElevatedButton.icon(
                         onPressed: () {
-                          download(
-                            context: context,
-                            processedData: ref.watch(
-                              processedDataProvider.select(
-                                (async) => async.value ?? [],
-                              ),
-                            ),
-                          );
+                          // TODO: xls export service
                         },
                         icon: Icon(Icons.download),
                         label: Text("Download"),
