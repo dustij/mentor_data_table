@@ -46,74 +46,77 @@ class FilterMenu extends HookConsumerWidget {
 
     return SizedBox(
       width: 900,
-      child: Material(
-        elevation: 4,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Advanced Filters"),
-              ),
-              SizedBox(height: 8),
-              //------------------------------
-              // Filter list
-              //------------------------------
-              for (final filterDraft in localFilterListState.value)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: _FilterForm(
-                    filterDraft: filterDraft,
-                    onDelete: () {
-                      if (localFilterListState.value.length > 1) {
-                        localFilterListState.value = localFilterListState.value
-                            .where((f) => f != filterDraft)
-                            .toList();
-                      } else {
-                        localFilterListState.value = [_FilterDraft.blank()];
-                      }
-                    },
-                  ),
+      child: IntrinsicHeight(
+        child: Material(
+          elevation: 4,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Advanced Filters"),
                 ),
-              SizedBox(height: 8),
-              //------------------------------
-              // Buttons (bottom)
-              //------------------------------
-              Row(
-                children: [
-                  TextButton.icon(
-                    label: Text("Add New Filter"),
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      // Validate filter before adding to local state
-                      // if (localFilterListState.value.last.isValid()) {
-                      localFilterListState.value = [
-                        ...localFilterListState.value,
-                        _FilterDraft.blank(),
-                      ];
-                      // }
-                    },
-                  ),
-                  Spacer(),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      child: Text("Apply Filter"),
-                      onPressed: () {
-                        _setFilters(filterListNotifier, localFilterListState);
-                        onClose();
+                SizedBox(height: 8),
+                //------------------------------
+                // Filter list
+                //------------------------------
+                for (final filterDraft in localFilterListState.value)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: _FilterForm(
+                      filterDraft: filterDraft,
+                      onDelete: () {
+                        if (localFilterListState.value.length > 1) {
+                          localFilterListState.value = localFilterListState
+                              .value
+                              .where((f) => f != filterDraft)
+                              .toList();
+                        } else {
+                          localFilterListState.value = [_FilterDraft.blank()];
+                        }
                       },
                     ),
                   ),
-                ],
-              ),
-            ],
+                SizedBox(height: 8),
+                //------------------------------
+                // Buttons (bottom)
+                //------------------------------
+                Row(
+                  children: [
+                    TextButton.icon(
+                      label: Text("Add New Filter"),
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        // Validate filter before adding to local state
+                        // if (localFilterListState.value.last.isValid()) {
+                        localFilterListState.value = [
+                          ...localFilterListState.value,
+                          _FilterDraft.blank(),
+                        ];
+                        // }
+                      },
+                    ),
+                    Spacer(),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        child: Text("Apply Filter"),
+                        onPressed: () {
+                          _setFilters(filterListNotifier, localFilterListState);
+                          onClose();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

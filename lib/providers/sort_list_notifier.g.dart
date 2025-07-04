@@ -6,7 +6,7 @@ part of 'sort_list_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sortListNotifierHash() => r'f1e1668d140daa806f0845aae42cfa4496bbcf9a';
+String _$sortListNotifierHash() => r'cde9a632c4cdbe6c66500e72c1a263febfc00d2a';
 
 /// See also [SortListNotifier].
 @ProviderFor(SortListNotifier)

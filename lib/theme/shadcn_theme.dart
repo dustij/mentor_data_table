@@ -198,23 +198,6 @@ class ShadcnTheme {
         ),
       );
 
-  static final SearchBarThemeData tableSearchBarTheme = SearchBarThemeData(
-    elevation: WidgetStateProperty.all(0),
-    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-      RoundedRectangleBorder(
-        side: const BorderSide(color: ShadcnColors.border),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(8),
-          bottomLeft: Radius.circular(8),
-          topRight: Radius.zero,
-          bottomRight: Radius.zero,
-        ),
-      ),
-    ),
-    surfaceTintColor: WidgetStateProperty.all<Color>(ShadcnColors.surface),
-    overlayColor: WidgetStateProperty.all<Color>(ShadcnColors.surface),
-  );
-
   static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
     style: FilledButton.styleFrom(
       elevation: 0,
@@ -229,6 +212,13 @@ class ShadcnTheme {
           bottomRight: Radius.circular(8),
         ),
       ),
+    ),
+  );
+
+  static final DataTableThemeData tableTheme = DataTableThemeData(
+    decoration: BoxDecoration(
+      border: BoxBorder.all(color: ShadcnColors.border),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
     ),
   );
 }

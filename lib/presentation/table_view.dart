@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mentor_data_table/theme/shadcn_theme.dart";
 
 import "../models/entry.dart";
 import "../models/sort.dart";
@@ -22,9 +23,12 @@ class TableView extends ConsumerWidget {
       data: (entries) {
         return SizedBox.expand(
           child: SingleChildScrollView(
-            child: DataTable(
-              rows: _buildRows(entries),
-              columns: _buildColumns(sortList, sortListNotifier),
+            child: DataTableTheme(
+              data: ShadcnTheme.tableTheme,
+              child: DataTable(
+                rows: _buildRows(entries),
+                columns: _buildColumns(sortList, sortListNotifier),
+              ),
             ),
           ),
         );

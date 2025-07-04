@@ -7,7 +7,7 @@ part of 'filter_list_notifier.dart';
 // **************************************************************************
 
 String _$filterListNotifierHash() =>
-    r'792a6749645e143bc594a9ae502767e7185e8a62';
+    r'3afd7e4cd253f22f15f8770a9051b9e59adbbdd9';
 
 /// See also [FilterListNotifier].
 @ProviderFor(FilterListNotifier)
