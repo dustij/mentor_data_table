@@ -43,26 +43,26 @@ class TableScreen extends HookConsumerWidget {
                   padding: const EdgeInsets.all(8),
                   child: Row(
                     children: [
-                      Expanded(
-                        child: CompositedTransformTarget(
-                          link: layerLink,
-                          child: TableSearchBar(),
-                        ),
+                      // Expanded(
+                      CompositedTransformTarget(
+                        link: layerLink,
+                        child: TableSearchBar(),
                       ),
-                      // ---------------------------------
-                      // Filter Button
-                      // ---------------------------------
-                      FilledButtonTheme(
-                        // TODO: make like Jotform
-                        data: ShadcnTheme.filterButtonTheme,
-                        child: FilledButton.icon(
-                          onPressed: () {
-                            isFilterMenuOpen.value = !isFilterMenuOpen.value;
-                          },
-                          label: const Text("Filter"),
-                          icon: const Icon(Icons.filter_list),
-                        ),
-                      ),
+                      // ),
+                      // // ---------------------------------
+                      // // Filter Button
+                      // // ---------------------------------
+                      // FilledButtonTheme(
+                      //   // TODO: make like Jotform
+                      //   data: ShadcnTheme.filterButtonTheme,
+                      //   child: FilledButton.icon(
+                      //     onPressed: () {
+                      //       isFilterMenuOpen.value = !isFilterMenuOpen.value;
+                      //     },
+                      //     label: const Text("Filter"),
+                      //     icon: const Icon(Icons.filter_list),
+                      //   ),
+                      // ),
                       Spacer(),
                       // ---------------------------------
                       // Download Button

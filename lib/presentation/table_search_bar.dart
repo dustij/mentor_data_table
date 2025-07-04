@@ -21,29 +21,55 @@ class TableSearchBar extends HookConsumerWidget {
 
     useDebouncedSearch(controller, onSearch);
 
+    // Local state for showing filters menu
+    final isFilterMenuOpen = useState(false);
+
     return SearchBarTheme(
       data: ShadcnTheme.tableSearchBarTheme,
       child: Container(
         padding: const EdgeInsets.all(8.0),
-        child: SearchBar(
-          hintText: "Search",
-          controller: controller,
-          onSubmitted: onSearch,
-          trailing: controller.text.isNotEmpty
-              ? [
-                  IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      controller.clear();
-                      onSearch("");
-                    },
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 40,
+                child: SearchBar(
+                  hintText: "Search",
+                  controller: controller,
+                  onSubmitted: onSearch,
+                  trailing: controller.text.isNotEmpty
+                      ? [
+                          IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              controller.clear();
+                              onSearch("");
+                            },
+                          ),
+                        ]
+                      : null,
+                  padding: const WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 16.0),
                   ),
-                ]
-              : null,
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 16.0),
+                  leading: const Icon(Icons.search),
+                ),
+              ),
+              // ---------------------------------
+              // Filter Button
+              // ---------------------------------
+              FilledButtonTheme(
+                data: ShadcnTheme.filterButtonTheme,
+                child: FilledButton.icon(
+                  onPressed: () {
+                    isFilterMenuOpen.value = !isFilterMenuOpen.value;
+                  },
+                  label: const Text("Filter"),
+                  icon: const Icon(Icons.filter_list),
+                ),
+              ),
+            ],
           ),
-          leading: const Icon(Icons.search),
         ),
       ),
     );

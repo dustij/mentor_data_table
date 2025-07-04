@@ -6,15 +6,53 @@ library;
 
 import "package:flutter/material.dart";
 
+/// A slate gray palette derived from OKL-ch values for consistent slate tones.
+class Slate {
+  Slate._();
+
+  /// OKL-ch(98.4% 0.003 247.858)
+  static const Color slate50 = Color(0xFFF9FAFB);
+
+  /// OKL-ch(96.8% 0.007 247.896)
+  static const Color slate100 = Color(0xFFF3F4F6);
+
+  /// OKL-ch(92.9% 0.013 255.508)
+  static const Color slate200 = Color(0xFFE5E7EB);
+
+  /// OKL-ch(86.9% 0.022 252.894)
+  static const Color slate300 = Color(0xFFD1D5DB);
+
+  /// OKL-ch(70.4% 0.04 256.788)
+  static const Color slate400 = Color(0xFF9CA3AF);
+
+  /// OKL-ch(55.4% 0.046 257.417)
+  static const Color slate500 = Color(0xFF6B7280);
+
+  /// OKL-ch(44.6% 0.043 257.281)
+  static const Color slate600 = Color(0xFF4B5563);
+
+  /// OKL-ch(37.2% 0.044 257.287)
+  static const Color slate700 = Color(0xFF374151);
+
+  /// OKL-ch(27.9% 0.041 260.031)
+  static const Color slate800 = Color(0xFF1E293B);
+
+  /// OKL-ch(20.8% 0.042 265.755)
+  static const Color slate900 = Color(0xFF111827);
+
+  /// OKL-ch(12.9% 0.042 264.695)
+  static const Color slate950 = Color(0xFF0F172A);
+}
+
 /// A set of custom colors derived from Tailwind CSS palette used in the app’s UI theme.
 class ShadcnColors {
   static const Color primary = Color(0xFF3B82F6); // blue-500
   static const Color primaryDark = Color(0xFF1E40AF); // blue-800
-  static const Color background = Color(0xFFF9FAFB); // slate-50
+  static const Color background = Slate.slate50; // slate-50
   static const Color surface = Colors.white;
-  static const Color border = Color(0xFFE5E7EB); // slate-200
-  static const Color text = Color(0xFF374151); // slate-700
-  static const Color textSecondary = Color(0xFF6B7280); // slate-500
+  static const Color border = Slate.slate400;
+  static const Color text = Slate.slate700; // slate-700
+  static const Color textSecondary = Slate.slate500; // slate-500
   static const Color error = Color(0xFFEF4444); // red-500
 }
 
@@ -85,6 +123,7 @@ final ThemeData shadcnTheme = ThemeData(
       foregroundColor: Colors.white,
       padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      minimumSize: const Size(64, 40),
       elevation: 0,
     ),
   ),
@@ -127,7 +166,7 @@ final ThemeData shadcnTheme = ThemeData(
   ),
 
   // Scaffold background
-  scaffoldBackgroundColor: ShadcnColors.background,
+  scaffoldBackgroundColor: ShadcnColors.surface,
 
   // Snackbar styling
   snackBarTheme: SnackBarThemeData(
@@ -164,7 +203,12 @@ class ShadcnTheme {
     shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         side: const BorderSide(color: ShadcnColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          bottomLeft: Radius.circular(8),
+          topRight: Radius.zero,
+          bottomRight: Radius.zero,
+        ),
       ),
     ),
     surfaceTintColor: WidgetStateProperty.all<Color>(ShadcnColors.surface),
@@ -173,7 +217,18 @@ class ShadcnTheme {
 
   static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
     style: FilledButton.styleFrom(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 0,
+      backgroundColor: ShadcnColors.background,
+      foregroundColor: Slate.slate500,
+      side: const BorderSide(color: ShadcnColors.border),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.zero,
+          bottomLeft: Radius.zero,
+          topRight: Radius.circular(8),
+          bottomRight: Radius.circular(8),
+        ),
+      ),
     ),
   );
 }
