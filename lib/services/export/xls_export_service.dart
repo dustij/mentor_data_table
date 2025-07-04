@@ -17,14 +17,21 @@ class XlsExportService {
     final workbook = Workbook();
     final sheet = workbook.worksheets[0];
 
+    // Headers
+    for (int i = 0; i < EntryField.values.length; i++) {
+      sheet.getRangeByName("${column(i)}1").setText(EntryField.values[i].text);
+    }
+
+    // Entries
     for (int row = 0; row < data.length; row++) {
       for (int col = 0; col < EntryField.values.length; col++) {
-        sheet.getRangeByName("${colChar(col)}${row + 1}").setText(switch (col) {
+        sheet.getRangeByName("${column(col)}${row + 2}").setText(switch (col) {
           0 => data[row].mentorName,
           1 => data[row].studentName,
           2 => data[row].sessionDetails,
           3 => data[row].notes,
 
+          // To make Dart happy, this shouldn't ever happen though
           int() => throw UnimplementedError(
             "$col is out of range for entry fields",
           ),
@@ -50,7 +57,7 @@ class XlsExportService {
     }
   }
 
-  String colChar(int index) {
+  String column(int index) {
     final letters = [
       "A",
       "B",
