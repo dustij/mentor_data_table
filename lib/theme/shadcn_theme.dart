@@ -166,7 +166,7 @@ final ThemeData shadcnTheme = ThemeData(
   ),
 
   // Scaffold background
-  scaffoldBackgroundColor: ShadcnColors.surface,
+  scaffoldBackgroundColor: ShadcnColors.background,
 
   // Snackbar styling
   snackBarTheme: SnackBarThemeData(
@@ -218,7 +218,7 @@ class ShadcnTheme {
   static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
     style: FilledButton.styleFrom(
       elevation: 0,
-      backgroundColor: ShadcnColors.background,
+      backgroundColor: Slate.slate100,
       foregroundColor: Slate.slate500,
       side: const BorderSide(color: ShadcnColors.border),
       shape: const RoundedRectangleBorder(

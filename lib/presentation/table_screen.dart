@@ -8,7 +8,7 @@ import "package:mentor_data_table/services/export/xls_export_service.dart";
 import "../providers/filter_list_notifier.dart";
 import "../theme/shadcn_theme.dart";
 import "../presentation/filter_menu.dart";
-import "../presentation/table_search_bar.dart";
+import "table_search_filter_bar.dart";
 import "../presentation/table_view.dart";
 
 class TableScreen extends HookConsumerWidget {
@@ -46,7 +46,7 @@ class TableScreen extends HookConsumerWidget {
                       // Expanded(
                       CompositedTransformTarget(
                         link: layerLink,
-                        child: TableSearchBar(),
+                        child: TableSearchFilterBar(),
                       ),
                       // ),
                       // // ---------------------------------
