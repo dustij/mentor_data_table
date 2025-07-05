@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:mentor_data_table/theme/shadcn_theme.dart";
 
 import "../models/entry.dart";
 import "../models/sort.dart";
@@ -23,12 +22,9 @@ class TableView extends ConsumerWidget {
       data: (entries) {
         return SizedBox.expand(
           child: SingleChildScrollView(
-            child: DataTableTheme(
-              data: ShadcnTheme.tableTheme,
-              child: DataTable(
-                rows: _buildRows(entries),
-                columns: _buildColumns(sortList, sortListNotifier),
-              ),
+            child: DataTable(
+              rows: _buildRows(entries),
+              columns: _buildColumns(sortList, sortListNotifier, context),
             ),
           ),
         );
@@ -54,6 +50,7 @@ class TableView extends ConsumerWidget {
   List<DataColumn> _buildColumns(
     List<Sort> sortList,
     SortListNotifier notifier,
+    BuildContext context,
   ) {
     return Entry.fields.map((field) {
       final sortState = sortList.firstWhere(
@@ -72,8 +69,11 @@ class TableView extends ConsumerWidget {
       return DataColumn(
         label: Row(
           children: [
-            Text(field.toString()),
-            const SizedBox(width: 4),
+            Text(
+              field.toString(),
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(width: 16),
             sortIcon ?? const SizedBox(width: 16, height: 16),
           ],
         ),

@@ -50,7 +50,8 @@ class ShadcnColors {
   static const Color primaryDark = Color(0xFF1E40AF); // blue-800
   static const Color background = Slate.slate50; // slate-50
   static const Color surface = Colors.white;
-  static const Color border = Slate.slate400;
+  static const Color border = Slate.slate300;
+  static const Color borderVariant = Slate.slate400;
   static const Color text = Slate.slate700; // slate-700
   static const Color textSecondary = Slate.slate500; // slate-500
   static const Color error = Color(0xFFEF4444); // red-500
@@ -74,9 +75,11 @@ final ThemeData shadcnTheme = ThemeData(
     onSecondary: ShadcnColors.primaryDark,
     surface: ShadcnColors.surface,
     onSurface: ShadcnColors.text,
+    surfaceContainer: ShadcnColors.background,
     error: ShadcnColors.error,
     onError: Colors.white,
     outline: ShadcnColors.border,
+    outlineVariant: ShadcnColors.borderVariant,
   ),
 
   // AppBar
@@ -93,11 +96,11 @@ final ThemeData shadcnTheme = ThemeData(
     fillColor: ShadcnColors.surface,
     contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
     border: OutlineInputBorder(
-      borderSide: const BorderSide(color: ShadcnColors.border),
+      borderSide: const BorderSide(color: ShadcnColors.borderVariant),
       borderRadius: BorderRadius.circular(8),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: ShadcnColors.border),
+      borderSide: const BorderSide(color: ShadcnColors.borderVariant),
       borderRadius: BorderRadius.circular(8),
     ),
     focusedBorder: OutlineInputBorder(
@@ -121,7 +124,7 @@ final ThemeData shadcnTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: ShadcnColors.primary,
       foregroundColor: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       minimumSize: const Size(64, 40),
       elevation: 0,
@@ -160,7 +163,7 @@ final ThemeData shadcnTheme = ThemeData(
     margin: const EdgeInsets.all(8),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
-      side: const BorderSide(color: ShadcnColors.border),
+      side: const BorderSide(color: ShadcnColors.borderVariant),
     ),
     elevation: 0,
   ),
@@ -175,7 +178,7 @@ final ThemeData shadcnTheme = ThemeData(
     behavior: SnackBarBehavior.floating,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
-      side: const BorderSide(color: ShadcnColors.border),
+      side: const BorderSide(color: ShadcnColors.borderVariant),
     ),
     actionTextColor: ShadcnColors.primary,
   ),
@@ -192,7 +195,7 @@ class ShadcnTheme {
       OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: ShadcnColors.text,
-          side: const BorderSide(color: ShadcnColors.border),
+          side: const BorderSide(color: ShadcnColors.borderVariant),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
@@ -203,7 +206,7 @@ class ShadcnTheme {
       elevation: 0,
       backgroundColor: Slate.slate100,
       foregroundColor: Slate.slate500,
-      side: const BorderSide(color: ShadcnColors.border),
+      side: const BorderSide(color: ShadcnColors.borderVariant),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.zero,

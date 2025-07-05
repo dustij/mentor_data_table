@@ -95,12 +95,20 @@ class TableScreen extends HookConsumerWidget {
                     ],
                   ),
                 ),
+                SizedBox(height: 16),
                 // ---------------------------------
                 // Table
                 // ---------------------------------
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(padding),
+                  child: Container(
+                    padding: const EdgeInsets.all(0),
+                    decoration: BoxDecoration(
+                      border: BoxBorder.fromLTRB(
+                        top: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ),
                     child: TableView(),
                   ),
                 ),
@@ -123,7 +131,7 @@ class TableScreen extends HookConsumerWidget {
             CompositedTransformFollower(
               link: layerLink,
               showWhenUnlinked: false,
-              offset: Offset(8, 68),
+              offset: Offset(0, 56),
               child: FilterMenu(onClose: () => filterMenuOpenNotifier.toggle()),
             ),
         ],

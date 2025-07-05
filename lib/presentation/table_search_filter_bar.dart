@@ -33,11 +33,17 @@ class TableSearchFilterBar extends HookConsumerWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: ShadcnColors.surface,
+              color: Theme.of(context).colorScheme.surface,
               border: Border(
-                top: const BorderSide(color: ShadcnColors.border),
-                left: const BorderSide(color: ShadcnColors.border),
-                bottom: const BorderSide(color: ShadcnColors.border),
+                top: BorderSide(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                left: BorderSide(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
+                bottom: BorderSide(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                ),
               ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(8),
