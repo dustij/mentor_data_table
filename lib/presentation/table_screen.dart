@@ -2,12 +2,13 @@ import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mentor_data_table/presentation/sticky_header_table.dart";
 import "package:mentor_data_table/providers/filter_menu_open_notifier.dart";
 import "package:mentor_data_table/providers/processed_data.dart";
 import "package:mentor_data_table/services/export/xls_export_service.dart";
 
 import "../presentation/filter_menu.dart";
-import "table_search_filter_bar.dart";
+import "search_filter_bar.dart";
 import "../presentation/table_view.dart";
 
 class TableScreen extends HookConsumerWidget {
@@ -27,9 +28,6 @@ class TableScreen extends HookConsumerWidget {
     // Link to position, place menu below search bar
     final layerLink = useRef(LayerLink()).value;
 
-    // TODO: Padding (responsive)
-    const padding = 16.0;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -41,12 +39,7 @@ class TableScreen extends HookConsumerWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    padding,
-                    padding,
-                    padding,
-                    0,
-                  ),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                   child: Row(
                     children: [
                       // ---------------------------------
@@ -54,7 +47,7 @@ class TableScreen extends HookConsumerWidget {
                       // ---------------------------------
                       CompositedTransformTarget(
                         link: layerLink,
-                        child: TableSearchFilterBar(),
+                        child: SearchFilterBar(),
                       ),
                       Spacer(),
                       // ---------------------------------
@@ -109,7 +102,8 @@ class TableScreen extends HookConsumerWidget {
                         ),
                       ),
                     ),
-                    child: TableView(),
+                    // child: TableView(),
+                    child: StickyHeaderTable(),
                   ),
                 ),
               ],
@@ -127,6 +121,7 @@ class TableScreen extends HookConsumerWidget {
                 child: const SizedBox.expand(),
               ),
             ),
+          // Filter menu widget
           if (filterMenuOpen)
             CompositedTransformFollower(
               link: layerLink,

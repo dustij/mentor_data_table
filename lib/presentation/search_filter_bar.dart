@@ -9,8 +9,8 @@ import "../providers/filter_menu_open_notifier.dart";
 import "../providers/search_notifier.dart";
 import "../theme/shadcn_theme.dart";
 
-class TableSearchFilterBar extends HookConsumerWidget {
-  const TableSearchFilterBar({super.key});
+class SearchFilterBar extends HookConsumerWidget {
+  const SearchFilterBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
