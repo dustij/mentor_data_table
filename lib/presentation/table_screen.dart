@@ -7,8 +7,8 @@ import "../presentation/filter_menu.dart";
 import "../presentation/sticky_header_table.dart";
 import "../providers/filter_menu_open_notifier.dart";
 import "../providers/processed_data.dart";
-import "../services/export/xls_export_service.dart";
 
+import "download_button.dart";
 import "search_filter_bar.dart";
 
 class TableScreen extends HookConsumerWidget {
@@ -53,38 +53,7 @@ class TableScreen extends HookConsumerWidget {
                       // ---------------------------------
                       // Download Button
                       // ---------------------------------
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          exportData.when(
-                            data: (data) {
-                              final exportService = XlsExportService();
-                              exportService.export(
-                                fileName: "test",
-                                context: context,
-                                data: data,
-                              );
-                            },
-                            error: (_, _) =>
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Oops! Something went wrong.",
-                                    ),
-                                  ),
-                                ),
-                            loading: () =>
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      "Cool! Your download is started.",
-                                    ),
-                                  ),
-                                ),
-                          );
-                        },
-                        icon: Icon(Icons.download),
-                        label: Text("Download"),
-                      ),
+                      DownloadButton(exportData: exportData),
                     ],
                   ),
                 ),

@@ -7,14 +7,14 @@ import "package:hooks_riverpod/hooks_riverpod.dart";
 
 import "../providers/filter_menu_open_notifier.dart";
 import "../providers/search_notifier.dart";
-import "../theme/shadcn_theme.dart";
+
+import "filter_button.dart";
 
 class SearchFilterBar extends HookConsumerWidget {
   const SearchFilterBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Toggle filter menu
     final filterMenuOpenNotifier = ref.read(
       filterMenuOpenNotifierProvider.notifier,
     );
@@ -90,14 +90,7 @@ class SearchFilterBar extends HookConsumerWidget {
           // ---------------------------------
           // Filter Button
           // ---------------------------------
-          FilledButtonTheme(
-            data: ShadcnTheme.filterButtonTheme,
-            child: FilledButton.icon(
-              onPressed: () => filterMenuOpenNotifier.toggle(),
-              label: const Text("Filter"),
-              icon: const Icon(Icons.filter_alt),
-            ),
-          ),
+          FilterButton(),
         ],
       ),
     );

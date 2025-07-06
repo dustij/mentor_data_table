@@ -202,30 +202,4 @@ class ShadcnTheme {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       );
-
-  // Filter button
-  static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
-    style: FilledButton.styleFrom(
-      elevation: 0,
-      backgroundColor: Slate.slate100,
-      foregroundColor: Slate.slate500,
-      side: const BorderSide(color: ShadcnColors.borderVariant),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.zero,
-          bottomLeft: Radius.zero,
-          topRight: Radius.circular(8),
-          bottomRight: Radius.circular(8),
-        ),
-      ),
-    ),
-  );
-
-  // Old table theme (not used)
-  static final DataTableThemeData tableTheme = DataTableThemeData(
-    decoration: BoxDecoration(
-      border: BoxBorder.all(color: ShadcnColors.border),
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-    ),
-  );
 }
