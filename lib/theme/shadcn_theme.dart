@@ -76,6 +76,8 @@ final ThemeData shadcnTheme = ThemeData(
     surface: ShadcnColors.surface,
     onSurface: ShadcnColors.text,
     surfaceContainer: ShadcnColors.background,
+    surfaceDim: Slate.slate100,
+    onSurfaceVariant: Slate.slate500,
     error: ShadcnColors.error,
     onError: Colors.white,
     outline: ShadcnColors.border,
@@ -201,6 +203,7 @@ class ShadcnTheme {
         ),
       );
 
+  // Filter button
   static final FilledButtonThemeData filterButtonTheme = FilledButtonThemeData(
     style: FilledButton.styleFrom(
       elevation: 0,
@@ -218,6 +221,7 @@ class ShadcnTheme {
     ),
   );
 
+  // Old table theme (not used)
   static final DataTableThemeData tableTheme = DataTableThemeData(
     decoration: BoxDecoration(
       border: BoxBorder.all(color: ShadcnColors.border),

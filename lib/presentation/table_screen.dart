@@ -2,14 +2,14 @@ import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
-import "package:mentor_data_table/presentation/sticky_header_table.dart";
-import "package:mentor_data_table/providers/filter_menu_open_notifier.dart";
-import "package:mentor_data_table/providers/processed_data.dart";
-import "package:mentor_data_table/services/export/xls_export_service.dart";
 
 import "../presentation/filter_menu.dart";
+import "../presentation/sticky_header_table.dart";
+import "../providers/filter_menu_open_notifier.dart";
+import "../providers/processed_data.dart";
+import "../services/export/xls_export_service.dart";
+
 import "search_filter_bar.dart";
-import "../presentation/table_view.dart";
 
 class TableScreen extends HookConsumerWidget {
   const TableScreen({super.key});
@@ -93,18 +93,8 @@ class TableScreen extends HookConsumerWidget {
                 // Table
                 // ---------------------------------
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(0),
-                    decoration: BoxDecoration(
-                      border: BoxBorder.fromLTRB(
-                        top: BorderSide(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ),
-                    // child: TableView(),
-                    child: StickyHeaderTable(),
-                  ),
+                  child: StickyHeaderTable(),
+                  // ),
                 ),
               ],
             ),
