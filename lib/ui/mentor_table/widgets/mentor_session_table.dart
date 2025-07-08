@@ -22,6 +22,8 @@ class MentorSessionTable extends ConsumerWidget {
       error: (e, _) => Text("Error: $e"),
       data: (state) {
         return Container(
+          width: 1000, // TODO: temporary constraints, find a better way maybe
+          height: 1000,
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: CustomScrollView(
             slivers: [

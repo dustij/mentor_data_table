@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+import "package:mentor_data_table/ui/core/breakpoints.dart";
 
 import "../../../domain/models/filter/filter.dart";
 import "../../core/themes/shadcn_theme.dart";
@@ -46,7 +47,7 @@ class SearchFilterBar extends HookConsumerWidget {
               ),
             ),
             height: 48,
-            width: 400,
+            width: context.responsive<double>(base: 200),
             child: SearchBar(
               hintText: "Search",
               controller: controller,

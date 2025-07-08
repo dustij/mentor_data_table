@@ -126,9 +126,9 @@ final ThemeData shadcnTheme = ThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: ShadcnColors.primary,
       foregroundColor: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 19, horizontal: 24),
+      fixedSize: const Size.fromHeight(48),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      minimumSize: const Size(64, 40),
       elevation: 0,
     ),
   ),
