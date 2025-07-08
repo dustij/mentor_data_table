@@ -41,13 +41,13 @@ extension BuildContextBreakpoints on BuildContext {
 }
 
 extension ResponsiveValue on BuildContext {
-  /// Pick a value based on Tailwind-style breakpoints:
-  ///  • xs (default) for width < 640
-  ///  • sm for width ≥ 640 && < 768
-  ///  • md for width ≥ 768 && < 1024
-  ///  • lg for width ≥ 1024 && < 1280
-  ///  • xl for width ≥ 1280 && < 1536
-  ///  • 2xl for width ≥ 1536
+  /// Example:
+  ///
+  /// ```
+  /// Padding(
+  ///   padding: const EdgeInsets.all(context.responsive<double>(base: 8, md: 12, lg: 16)),
+  ///   child: ...
+  /// ```
   T responsive<T>({required T base, T? sm, T? md, T? lg, T? xl, T? xxl}) {
     final w = screenWidth;
     if (w >= Breakpoints._xxl && xxl != null) return xxl;

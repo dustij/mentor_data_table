@@ -71,6 +71,9 @@ class TableScreen extends HookConsumerWidget {
                                 );
                               }
                             },
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(horizontal: 0),
+                            ),
                             child: Icon(Icons.download),
                           ),
                           sm: ElevatedButton.icon(
@@ -142,7 +145,7 @@ class TableScreen extends HookConsumerWidget {
                 link: layerLink,
                 showWhenUnlinked: false,
                 offset: const Offset(0, 56),
-                child: FilterMenu(),
+                child: SingleChildScrollView(child: FilterMenu()),
               ),
           ],
         ),

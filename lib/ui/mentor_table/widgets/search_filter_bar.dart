@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
 import "package:hooks_riverpod/hooks_riverpod.dart";
+
 import "package:mentor_data_table/ui/core/breakpoints.dart";
 
 import "../../../domain/models/filter/filter.dart";
@@ -16,6 +17,14 @@ class SearchFilterBar extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.read(tableViewModelProvider.notifier);
+    final state = ref.watch(tableViewModelProvider);
+
+    final filters = state.when(
+      loading: () => <Filter>[],
+      error: (_, _) => <Filter>[],
+      data: (s) => s.filters,
+    );
+
     final controller = useTextEditingController();
 
     useListenable(controller);
@@ -47,7 +56,11 @@ class SearchFilterBar extends HookConsumerWidget {
               ),
             ),
             height: 48,
-            width: context.responsive<double>(base: 200),
+            width: context.responsive<double>(
+              base: filters.isEmpty ? 200 : 170,
+              sm: filters.isEmpty ? 300 : 250,
+              md: filters.isEmpty ? 400 : 330,
+            ),
             child: SearchBar(
               hintText: "Search",
               controller: controller,
@@ -112,7 +125,7 @@ class _FilterButton extends HookConsumerWidget {
         backgroundColor: Slate.slate100,
         foregroundColor: Slate.slate500,
         side: const BorderSide(color: ShadcnColors.borderVariant),
-        padding: EdgeInsets.only(left: 16, right: 18),
+        padding: EdgeInsets.only(left: 16, right: 8),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.zero,
@@ -126,13 +139,29 @@ class _FilterButton extends HookConsumerWidget {
         children: [
           const Icon(Icons.filter_alt),
           const SizedBox(width: 8),
-          if (filters.isEmpty) const Text("Filter"),
-          if (filters.isNotEmpty) const Text("Filters:"),
-          if (filters.isNotEmpty) const SizedBox(width: 14),
+          if (filters.isEmpty)
+            context.responsive<Widget>(
+              base: Text(""),
+              sm: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Text("Filter"),
+              ),
+            ),
           if (filters.isNotEmpty)
-            _FiltersNumberAndDeleteIconButton(
-              number: filters.length,
-              onClick: viewModel.clearFilters,
+            context.responsive<Widget>(
+              base: Text(""),
+              sm: Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Text("Filters:"),
+              ),
+            ),
+          if (filters.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: _FiltersNumberAndDeleteIconButton(
+                number: filters.length,
+                onClick: viewModel.clearFilters,
+              ),
             ),
         ],
       ),
@@ -152,24 +181,28 @@ class _FiltersNumberAndDeleteIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 8),
+      height: 32,
+      padding: EdgeInsets.only(
+        left: context.responsive<double>(base: 0, sm: 16),
+      ),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withAlpha(50),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          Text("$number"),
-          const SizedBox(width: 8),
+          context.responsive<Widget>(
+            base: SizedBox.shrink(),
+            sm: Text("$number"),
+          ),
           IconButton(
+            visualDensity: VisualDensity.compact,
             icon: const Icon(Icons.clear),
             onPressed: onClick,
             style: IconButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.all(0),
-              minimumSize: Size(24, 24),
               hoverColor: Colors.transparent,
             ),
           ),
