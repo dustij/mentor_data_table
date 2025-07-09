@@ -1,3 +1,18 @@
+/// Module: Export XLS Service
+///
+/// Provides a high-level service to generate and export mentor session data
+/// to an Excel file (`.xlsx`). Uses Syncfusion XlsIO to build the workbook,
+/// populates headers and rows from `MentorSession` data, and delegates the
+/// file writing/ download to the platform-specific exporter.
+///
+/// **Setup:**
+/// - Add `syncfusion_flutter_xlsio` and the necessary platform exporter
+///   dependencies (`path_provider`, `open_file`, `universal_html`) in
+///   `pubspec.yaml`.
+/// - Ensure asset permissions and file system access are configured
+///   for native platforms.
+library;
+
 import "dart:typed_data";
 
 import "package:syncfusion_flutter_xlsio/xlsio.dart";
@@ -7,7 +22,32 @@ import "../../../domain/models/mentor_session/mentor_session.dart";
 
 import "_internal/platform_export.dart";
 
+/// A service class for creating and exporting an XLSX report of mentor sessions.
+///
+/// Contains a single static method `exec` which builds the workbook, populates
+/// headers and data rows, then calls `exportXlsPlatformSpecific` to write or
+/// download the file.
 class ExportXlsService {
+  /// Builds an Excel workbook from the provided mentor session data and exports it.
+  ///
+  /// **Parameters:**
+  /// - `fileName` (`String`, required): Desired base name for the output file (without extension).
+  /// - `data` (`List<MentorSession>`, required): The list of session records to include.
+  ///
+  /// **Returns:** `Future<bool>`
+  /// - Completes with `true` if export succeeded, `false` on any error.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// final sessions = await fetchSessions();
+  /// final success = await ExportXlsService.exec(
+  ///   fileName: "mentor_sessions_report",
+  ///   data: sessions,
+  /// );
+  /// if (!success) {
+  ///   // handle failure
+  /// }
+  /// ```
   static Future<bool> exec({
     required String fileName,
     required List<MentorSession> data,
@@ -53,6 +93,20 @@ class ExportXlsService {
   }
 }
 
+/// Converts a zero-based column index to its Excel column letter.
+///
+/// Maps 0→"A", 1→"B", …, 25→"Z"; wraps around for indices ≥26.
+///
+/// **Parameters:**
+/// - `index` (`int`): Zero-based column number.
+///
+/// **Returns:** `String` Excel column letter.
+///
+/// **Example:**
+/// ```dart
+/// column(0); // "A"
+/// column(27); // "B" (wrap-around)
+/// ```
 String column(int index) {
   final letters = [
     "A",

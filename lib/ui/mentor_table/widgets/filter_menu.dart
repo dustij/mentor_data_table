@@ -1,3 +1,14 @@
+/// Module: Filter Menu Widget
+///
+/// Provides the UI for defining and applying multiple filter criteria
+/// to the mentor sessions table. Displays a dynamic list of filter rows
+/// (`_FilterForm`), and buttons to add new filters or apply them.
+///
+/// **Usage:**
+/// - Reads current filters from `TableViewModel`.
+/// - Calls `setFilters` and `toggleFilterMenu` on apply.
+library;
+
 import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
@@ -8,10 +19,19 @@ import "../../../domain/models/filter/filter.dart";
 import "../../core/themes/shadcn_theme.dart";
 import "../view_models/table_viewmodel.dart";
 
+/// A widget that presents advanced filter options for mentor sessions.
+///
+/// Uses Riverpod to watch and update filter state, and Flutter Hooks
+/// to manage local draft state for the form fields.
 class FilterMenu extends HookConsumerWidget {
   const FilterMenu({super.key});
 
   @override
+  /// Builds the filter menu UI.
+  ///
+  /// - Shows a list of filter forms for each draft filter.
+  /// - Provides buttons to add a new filter row and to apply filters.
+  /// - Adjusts width responsively using `context.responsive`.
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tableViewModelProvider);
     final viewModel = ref.read(tableViewModelProvider.notifier);
@@ -161,6 +181,12 @@ class FilterMenu extends HookConsumerWidget {
     );
   }
 
+  /// Converts the list of `_FilterDraft` into `Filter` objects and
+  /// passes them to the provided `setFilters` callback.
+  ///
+  /// **Parameters:**
+  /// - `setFilters` (`Function(List<Filter>)`): Callback to set filters.
+  /// - `localFilterListState` (`ValueNotifier<List<_FilterDraft>>`): Current draft list.
   void _setFilters(
     Function(List<Filter>) setFilters,
     ValueNotifier<List<_FilterDraft>> localFilterListState,
@@ -180,6 +206,11 @@ class FilterMenu extends HookConsumerWidget {
   }
 }
 
+/// A single row form for configuring one filter criterion.
+///
+/// Contains dropdowns for `Field` and `FilterOperator`, a text input,
+/// and a delete button. Lays out fields vertically or horizontally
+/// based on screen size.
 class _FilterForm extends StatelessWidget {
   final _FilterDraft filterDraft;
   final VoidCallback onDelete;
@@ -192,6 +223,10 @@ class _FilterForm extends StatelessWidget {
   });
 
   @override
+  /// Builds the UI for a filter row, including field/operator selectors,
+  /// text input, and delete button. Uses responsive layout:
+  /// - Vertical stack on narrow screens.
+  /// - Row with fixed delete button on wider screens.
   Widget build(BuildContext context) {
     // Raw form fields without flex
     final rawFields = [
@@ -281,6 +316,9 @@ class _FilterForm extends StatelessWidget {
   }
 }
 
+/// Holds temporary filter input values before applying.
+///
+/// Tracks a selected `Field`, `FilterOperator`, and the filter text.
 class _FilterDraft {
   Field? field;
   FilterOperator? operator;
@@ -296,6 +334,8 @@ class _FilterDraft {
     textController = TextEditingController(text: null);
   }
 
+  /// Returns `true` if this draft has a non-null field/operator and
+  /// non-empty text, indicating it can be converted to a `Filter`.
   bool isValid() {
     try {
       return field != null &&

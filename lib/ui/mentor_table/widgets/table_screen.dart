@@ -1,3 +1,12 @@
+/// Module: Table Screen
+///
+/// The main scaffold for the mentor sessions feature. Combines:
+/// - A responsive search and filter bar.
+/// - A download button for exporting data.
+/// - A horizontally scrollable sessions table.
+/// - An overlay filter menu tied to the search bar position.
+library;
+
 import "package:flutter/material.dart";
 
 import "package:flutter_hooks/flutter_hooks.dart";
@@ -10,9 +19,20 @@ import "filter_menu.dart";
 import "mentor_session_table.dart";
 import "search_filter_bar.dart";
 
+/// A `HookConsumerWidget` that composes the overall table screen.
+///
+/// Manages:
+/// - Tapping outside to close the filter menu.
+/// - Laying out the search/filter bar, download button, and table.
+/// - Positioning the filter menu overlay beneath the search bar.
 class TableScreen extends HookConsumerWidget {
   const TableScreen({super.key});
 
+  /// Builds the screen UI including:
+  /// - A `SafeArea` with a `Stack` for layering.
+  /// - A `GestureDetector` to dismiss the filter menu on outside taps.
+  /// - A `Column` with search/filter bar, download button, and table.
+  /// - Conditional overlay of the `FilterMenu` when open.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tableViewModelProvider);

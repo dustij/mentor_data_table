@@ -1,4 +1,17 @@
-// to generate run: `dart run build_runner build --delete-conflicting-outputs`
+/// Module: Table ViewModel
+///
+/// Provides a Riverpod AsyncNotifier (`TableViewModel`) for managing the
+/// mentor sessions table state. Responsibilities include:
+/// - Loading initial session data from the local repository.
+/// - Handling search term updates.
+/// - Toggling and applying filters.
+/// - Managing sort criteria.
+/// - Exporting table data to XLS via `ExportXlsService`.
+///
+/// **Setup:**
+/// - Ensure `MentorSessionRepositoryLocal` and `ExportXlsService` are available.
+library;
+
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../../data/repositories/mentor_session/mentor_session_repository_local.dart";
@@ -13,19 +26,38 @@ import "table_state/table_state.dart";
 
 part "table_viewmodel.g.dart";
 
+/// A `AsyncNotifier<TableState>` that encapsulates the table UI logic.
+///
+/// Initializes with raw session data and exposes methods for search,
+/// filter, sort, and export operations. All state modifications trigger
+/// a private `_recompute` to update the visible data.
 @riverpod
 class TableViewModel extends _$TableViewModel {
+  /// Loads mentor session data and returns the initial table state.
+  ///
+  /// **Returns:** `Future<TableState>` with `data` from the repository,
+  /// empty `filters`, `sorts`, and `searchTerm`.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// final state = await ref.read(tableViewModelProvider.future);
+  /// ```
   @override
   Future<TableState> build() async {
     final raw = await ref.watch(mentorSessionRepositoryLocalProvider.future);
     return TableState(data: raw, filters: [], sorts: [], searchTerm: "");
   }
 
+  /// Updates the search term and refreshes the table data.
+  ///
+  /// **Parameters:**
+  /// - `text` (`String`): The new search query.
   void setSearchTerm(String text) {
     state = state.whenData((prev) => prev.copyWith(searchTerm: text));
     _recompute();
   }
 
+  /// Toggles the visibility of the filter menu and refreshes data.
   void toggleFilterMenu() {
     state = state.whenData(
       (prev) => prev.copyWith(isFilterMenuOpen: !prev.isFilterMenuOpen),
@@ -33,16 +65,27 @@ class TableViewModel extends _$TableViewModel {
     _recompute();
   }
 
+  /// Applies the provided list of filters and refreshes the table data.
+  ///
+  /// **Parameters:**
+  /// - `filters` (`List<Filter>`): Active filter criteria.
   void setFilters(List<Filter> filters) {
     state = state.whenData((prev) => prev.copyWith(filters: filters));
     _recompute();
   }
 
+  /// Clears all filters and refreshes the table data.
   void clearFilters() {
     state = state.whenData((prev) => prev.copyWith(filters: <Filter>[]));
     _recompute();
   }
 
+  /// Toggles sort direction for the given field and refreshes data.
+  ///
+  /// Cycles through `none`→`asc`→`desc`→`none`.
+  ///
+  /// **Parameters:**
+  /// - `field` (`Field`): The column to sort by.
   void updateSorts(Field field) {
     state = state.whenData((prev) {
       final existingIndex = prev.sorts.indexWhere((s) => s.field == field);
@@ -77,6 +120,9 @@ class TableViewModel extends _$TableViewModel {
     _recompute();
   }
 
+  /// Exports current table rows to an XLS file using `ExportXlsService`.
+  ///
+  /// **Returns:** `Future<bool>` indicating success (`true`) or failure (`false`).
   Future<bool> exportToXls() async {
     final table = state.requireValue;
     final rows = table.data;
@@ -92,6 +138,9 @@ class TableViewModel extends _$TableViewModel {
     }
   }
 
+  /// Recomputes visible table data by applying filters, search, and sorts.
+  ///
+  /// Uses raw data from the repository and updates `state.data`.
   void _recompute() {
     final rawAsync = ref.read(mentorSessionRepositoryLocalProvider);
     // Use valueOrNull to safely extract the loaded list, or empty if not ready
@@ -102,6 +151,13 @@ class TableViewModel extends _$TableViewModel {
     state = state.whenData((current) => current.copyWith(data: sorted));
   }
 
+  /// Filters the raw session list by the active filters specification.
+  ///
+  /// **Parameters:**
+  /// - `raw` (`List<MentorSession>`): Original session list.
+  /// - `filters` (`List<Filter>`): Filters to apply.
+  ///
+  /// **Returns:** A filtered list of `MentorSession`.
   List<MentorSession> _applyFilters(
     List<MentorSession> raw,
     List<Filter> filters,
@@ -115,6 +171,13 @@ class TableViewModel extends _$TableViewModel {
     return raw.where(spec.isSatisfiedBy).toList();
   }
 
+  /// Filters sessions by the search term across all text fields.
+  ///
+  /// **Parameters:**
+  /// - `filtered` (`List<MentorSession>`): Sessions after filter step.
+  /// - `s` (`String`): Current search term.
+  ///
+  /// **Returns:** A list of sessions matching the search query.
   List<MentorSession> _applySearch(List<MentorSession> filtered, String s) {
     if (s.isEmpty) return List.from(filtered);
 
@@ -127,6 +190,13 @@ class TableViewModel extends _$TableViewModel {
     }).toList();
   }
 
+  /// Sorts the session list according to the active sort criteria.
+  ///
+  /// **Parameters:**
+  /// - `data` (`List<MentorSession>`): Sessions after search step.
+  /// - `sorts` (`List<Sort>`): Sort specifications.
+  ///
+  /// **Returns:** A sorted list of `MentorSession`.
   List<MentorSession> _applySort(List<MentorSession> data, List<Sort> sorts) {
     // If no sorts defined, return a shallow copy
     if (sorts.isEmpty) return List.from(data);

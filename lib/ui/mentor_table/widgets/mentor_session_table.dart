@@ -1,3 +1,10 @@
+/// Module: Mentor Session Table Widget
+///
+/// Defines the main table view for mentor sessions. Uses a `CustomScrollView`
+/// with a persistent header for sortable column headers and a sliver list for rows.
+/// Integrates with `TableViewModel` for state, sorting, and data updates.
+library;
+
 import "package:flutter/material.dart";
 
 import "package:hooks_riverpod/hooks_riverpod.dart";
@@ -9,9 +16,19 @@ import "../../../domain/models/sort/sort.dart";
 import "../../core/themes/shadcn_theme.dart";
 import "../view_models/table_viewmodel.dart";
 
+/// A widget that displays mentor session data in a scrollable table.
+///
+/// Listens to `TableViewModel` for loading, error, and data states, and
+/// renders a header with sortable columns (`_TableHeaderDelegate`) and
+/// a list of session rows (`_Row`).
 class MentorSessionTable extends ConsumerWidget {
   const MentorSessionTable({super.key});
 
+  /// Builds the table UI based on the current async table state.
+  ///
+  /// - Shows a loading indicator when data is loading.
+  /// - Displays an error message on failure.
+  /// - Renders the table with sortable headers and data rows when loaded.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.read(tableViewModelProvider.notifier);
@@ -22,7 +39,7 @@ class MentorSessionTable extends ConsumerWidget {
       error: (e, _) => Text("Error: $e"),
       data: (state) {
         return Container(
-          width: 1000, // TODO: temporary constraints, find a better way maybe
+          width: 1000,
           height: 1000,
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: CustomScrollView(
@@ -55,11 +72,18 @@ class MentorSessionTable extends ConsumerWidget {
   }
 }
 
+/// A single table row displaying one `MentorSession`.
+///
+/// Expands each `Field` value into its own cell with consistent styling.
 class _Row extends StatelessWidget {
   final MentorSession rowData;
 
   const _Row({required this.rowData});
 
+  /// Builds a horizontal row of cells for the given `rowData`.
+  ///
+  /// Iterates over `Field.values`, creating a styled `Expanded` cell
+  /// with the session’s field value.
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -98,6 +122,10 @@ class _Row extends StatelessWidget {
   }
 }
 
+/// A delegate for rendering the table’s persistent header with sortable columns.
+///
+/// Renders a row of `FilledButton`s, one per `Field`, showing sort icons and
+/// forwarding sort taps to the provided `onSort` callback.
 class _TableHeaderDelegate extends SliverPersistentHeaderDelegate {
   final List<Sort> sortList;
   final void Function(Field) onSort;
@@ -109,6 +137,10 @@ class _TableHeaderDelegate extends SliverPersistentHeaderDelegate {
     required this.context,
   });
 
+  /// Builds the header row UI for sortable column headers.
+  ///
+  /// For each `Field`, determines the current sort direction,
+  /// displays the corresponding icon, and handles tap to sort.
   @override
   Widget build(
     BuildContext context,
@@ -196,6 +228,9 @@ class _TableHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   double get minExtent => kMinInteractiveDimension;
 
+  /// Always rebuilds the header when delegate changes.
+  ///
+  /// Returns true to ensure header updates on state changes.
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
       true;
