@@ -16,7 +16,6 @@ import "dart:convert";
 
 import "package:flutter/services.dart";
 
-// to generate run: `dart run build_runner build --delete-conflicting-outputs`
 import "package:riverpod_annotation/riverpod_annotation.dart";
 
 import "../../../domain/models/mentor_session/mentor_session.dart";

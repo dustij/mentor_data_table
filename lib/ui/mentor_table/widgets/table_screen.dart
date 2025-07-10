@@ -124,7 +124,6 @@ class TableScreen extends HookConsumerWidget {
                   // ---------------------------------
                   // Table
                   // ---------------------------------
-                  // inside your Column, replace the UnconstrainedBox(...) with:
                   Expanded(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
