@@ -15,7 +15,7 @@ library;
 
 import "dart:typed_data";
 
-import "package:syncfusion_flutter_xlsio/xlsio.dart";
+import "package:excel/excel.dart";
 
 import "../../../domain/models/filter/filter.dart";
 import "../../../domain/models/mentor_session/mentor_session.dart";
@@ -48,6 +48,51 @@ class ExportXlsService {
   ///   // handle failure
   /// }
   /// ```
+  static Future<bool> exec({
+    required String fileName,
+    required List<MentorSession> data,
+  }) async {
+    try {
+      final excel = Excel.createExcel();
+      final sheet = excel["Sheet1"];
+
+      // H E A D E R S
+      for (int i = 0; i < Field.values.length; i++) {
+        sheet.cell(CellIndex.indexByString("${column(i)}1")).value =
+            TextCellValue(Field.values[i].text);
+      }
+
+      // R O W S
+      for (int row = 0; row < data.length; row++) {
+        for (int col = 0; col < Field.values.length; col++) {
+          sheet
+              .cell(CellIndex.indexByString("${column(col)}${row + 2}"))
+              .value = TextCellValue(switch (col) {
+            0 => data[row].mentorName,
+            1 => data[row].studentName,
+            2 => data[row].sessionDetails,
+            3 => data[row].notes,
+
+            // To make Dart happy; This shouldn't ever happen though
+            int() => throw UnimplementedError(
+              "$col is out of range for entry fields",
+            ),
+          });
+        }
+      }
+
+      fileName = fileName.endsWith(".xlsx") ? fileName : "$fileName.xlsx";
+      final bytes = Uint8List.fromList(excel.save()!);
+      final isSuccess = await exportXlsPlatformSpecific(bytes, fileName);
+      return isSuccess;
+    } catch (_) {
+      return false;
+    }
+  }
+}
+
+/*
+class ExportXlsService {
   static Future<bool> exec({
     required String fileName,
     required List<MentorSession> data,
@@ -92,6 +137,7 @@ class ExportXlsService {
     }
   }
 }
+*/
 
 /// Converts a zero-based column index to its Excel column letter.
 ///
